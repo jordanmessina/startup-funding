@@ -95,7 +95,6 @@ angular.module('fundingApp')
  .controller('FinalEquityCtrl', ['$scope', '$log', 'startupService', function ($scope, $log, startupService) {
      $scope.equityHolders = [];
 
-     //Every time the startup object gets updated, refresh the equity
      $scope.$watch(function(){
       return startupService
      }, function(){
