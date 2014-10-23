@@ -1,0 +1,18 @@
+<div ng-show="finalEquity(equityHolders).length">
+  <h4>Equity Breakdown</h4>
+  
+  <table class="table table-striped">
+    <thead>
+      <td>Name</td>
+      <td>Equity (%)</td>
+    </thead>
+    <tr ng-repeat="party in finalEquity(equityHolders)">
+      <td>{{party.name}}</td>
+      <td>{{party.equity}}%</td>
+    </tr>
+    <tr>
+      <td><strong>Total</strong></td>
+      <td><strong>100%</strong></td>
+    </tr>
+  </table>
+</div>

@@ -19,11 +19,13 @@
     <td></td>
   </thead>
   <tr ng-repeat="equityRound in equityRounds">
-    <td><input type="number" ng-model="equityRound.preMoneyValuation" class="form-control"></td>
+    <td><input type="number" ng-model="equityRound.preMoneyValuation" class="form-control" step="250000"></td>
     <td>
         <span ng-show="showInvestorList != $index">
             <ul>
-              <li ng-repeat="investor in equityRound.investors">{{investor.name}} - ${{investor.amount}} <a href="#" ng-click="removeInvestorFromEquityRound($parent.$index, $index)">x</a></li>
+              <li ng-repeat="investor in equityRound.investors">
+                <input type="text" ng-model="investor.name"> <input type="number" ng-model="investor.amount" min="0" step="100000"> <a href="#" ng-click="removeInvestorFromEquityRound($parent.$index, $index)">x</a>
+              </li>
               <li><a href="#" ng-click="toggleShowInvestorList($index)">Add Investor</a></li>
             </ul>
         </span>
@@ -35,7 +37,7 @@
           </form>
         </span>
     </td>
-    <td><button type="button" class="btn btn-danger" ng-click="removeConvertibleNote($index)">X</button></td>
+    <td><button type="button" class="btn btn-danger" ng-click="removeEquityRound($index)">X</button></td>
   </tr>
   <tr>
     <td><strong>{{totalRaised() | currency:"$":0}} Raised Total</strong></td>

@@ -41,7 +41,6 @@ angular.module('fundingApp')
     $scope.showInvestorList = null;
     $scope.toggleShowInvestorList = function (index) {
       $scope.showInvestorList = index;
-      $log.log($scope.showInvestorList);
     };
     $scope.addInvestorToConvertibleNote = function (index){
       startupService.addInvestorToConvertibleNote(index, $scope.investorToAddToConvertibleNote);
@@ -75,7 +74,6 @@ angular.module('fundingApp')
     $scope.showInvestorList = null;
     $scope.toggleShowInvestorList = function (index) {
       $scope.showInvestorList = index;
-      $log.log($scope.showInvestorList);
     };  
     $scope.addInvestorToEquityRound = function (index){
       startupService.addInvestorToEquityRound(index, $scope.investorToAddToEquityRound);
@@ -92,3 +90,14 @@ angular.module('fundingApp')
       templateUrl: 'templates/equityrounds.html'
     }    
   });
+
+angular.module('fundingApp')
+ .controller('FinalEquityCtrl', ['$scope', '$log', 'startupService', function ($scope, $log, startupService) {
+   $scope.equityHolders = [];
+   $scope.finalEquity = startupService.calculateEquity;
+ }])
+ .directive('finalEquity', function () {
+  return {
+    templateUrl: 'templates/finalequity.html'
+  }
+ });
