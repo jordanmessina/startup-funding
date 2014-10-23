@@ -108,7 +108,8 @@ angular.module('fundingApp')
       return totalRaised;
     };
 
-    startup.calculateEquity = function(equityForEachPartyAfterSeriesA){
+    startup.calculateEquity = function(){
+      var equityForEachPartyAfterSeriesA = [];
       //this is so we don't return a brand new object on each call
       //https://docs.angularjs.org/error/$rootScope/infdig
       equityForEachPartyAfterSeriesA.splice();
@@ -117,7 +118,7 @@ angular.module('fundingApp')
       var convertibleNotes = startup.convertibleNotes;
       var equityRounds = startup.equityRounds;
 
-      if (equityRounds.length == 0){
+      if (equityRounds.length === 0){
           return equityForEachPartyAfterSeriesA;
       }
       
