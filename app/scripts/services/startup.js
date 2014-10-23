@@ -109,27 +109,51 @@ angular.module('fundingApp')
     };
 
     startup.calculateEquity = function(){
-      var equityForEachPartyAfterSeriesA = [];
-      //this is so we don't return a brand new object on each call
-      //https://docs.angularjs.org/error/$rootScope/infdig
-      equityForEachPartyAfterSeriesA.splice();
-
+      var equityForEachParty = [];
       var founders = startup.founders;
       var convertibleNotes = startup.convertibleNotes;
       var equityRounds = startup.equityRounds;
 
       if (equityRounds.length === 0){
-          return equityForEachPartyAfterSeriesA;
+        return equityForEachParty;
+      } else if (equityRounds[0].investors.length === 0){
+        return equityForEachParty;
+      }
+
+      //series A
+      var preMoneyValuation = equityRounds[0].preMoneyValuation;
+      var totalRaisedForSeriesA = startup.totalRaisedForRound(0);
+      var totalEquityForSeriesAInvestors = (totalRaisedForSeriesA / (totalRaisedForSeriesA + preMoneyValuation))*100;
+      var totalInvestorsInSeriesA = equityRounds[0].investors.length;
+
+      for (var investorIndex = 0; investorIndex < totalInvestorsInSeriesA; investorIndex++){
+        var investor = equityRounds[0].investors[investorIndex];
+        equityForEachParty.push({
+          name: investor.name + ' - Series A',
+          equity: (investor.amount / (totalRaisedForSeriesA + preMoneyValuation))*100
+        });
       }
       
       //convertible note investors
+      var totalEquityFromConvertibleNotes = 0;
       var totalNotes = convertibleNotes.length;
       for (var notesIndex = 0; notesIndex < totalNotes; notesIndex++) {
+        var cap = convertibleNotes[notesIndex].cap;
+        var discount = convertibleNotes[notesIndex].discount;
         var totalInvestors = convertibleNotes[notesIndex].investors.length;
         for (var investorIndex = 0; investorIndex < totalInvestors; investorIndex++){
-          equityForEachPartyAfterSeriesA.push({
-            name: convertibleNotes[notesIndex].investors[investorIndex].name,
-            equity: '0'
+          var investor = convertibleNotes[notesIndex].investors[investorIndex];
+          //determine we should use the cap or discount for this investor for series A Pre Money
+          var equity = Math.max(
+              (investor.amount * ((100-discount)/100) / preMoneyValuation),
+              (investor.amount / Math.min(cap, preMoneyValuation))
+          );
+          //dilute the cn investor for series A
+          equity = (equity * ((100-totalEquityForSeriesAInvestors)/100))*100
+          totalEquityFromConvertibleNotes += equity;
+          equityForEachParty.push({
+            name: investor.name,
+            equity: equity
           });
         }
       }
@@ -137,81 +161,34 @@ angular.module('fundingApp')
       //founders
       var totalFounders = founders.length; 
       for (var founderIndex = 0; founderIndex < totalFounders; founderIndex++) {
-        equityForEachPartyAfterSeriesA.push({
-          name: founders[founderIndex].name,
-          equity: '0'
+        var founder = founders[founderIndex];
+        //dilution from convertible notes
+        var equity = founder.equity * ((100-totalEquityFromConvertibleNotes)/100);
+        //dilution from series a
+        equity = equity * ((100-totalEquityForSeriesAInvestors)/100)
+        equityForEachParty.push({
+          name: founder.name,
+          equity: equity
         });
       }
 
-      //equity rounds
-      var totalEquityRounds = equityRounds.length;
-      for (var equityRoundIndex = 0; equityRoundIndex < totalEquityRounds; equityRoundIndex++) {
-        var totalInvestors = equityRounds[equityRoundIndex].investors.length;
-        for (var investorIndex = 0; investorIndex < totalInvestors; investorIndex++){
-          equityForEachPartyAfterSeriesA.push({
-            name: equityRounds[equityRoundIndex].investors[investorIndex].name,
-            equity: '0'
-          });
+      //other equity rounds
+      if (equityRounds.length > 1){
+        var totalEquityRounds = equityRounds.length;
+        for (var equityRoundIndex = 1; equityRoundIndex < totalEquityRounds; equityRoundIndex++) {
+          var totalInvestors = equityRounds[equityRoundIndex].investors.length;
+          for (var investorIndex = 0; investorIndex < totalInvestors; investorIndex++){
+            equityForEachParty.push({
+              name: equityRounds[equityRoundIndex].investors[investorIndex].name,
+              equity: '0'
+            });
+          }
         }
       }
 
-      //figure out what the CNs convert to
-      //var preMoneyValuation = equityRounds[0].preMoneyValuation;
-      //var totalConvertibleNotes = convertibleNotes.length;
-      //var equityGivenAwayByConvertibleNotes = 0;
-      //for(var noteIndex = 0; noteIndex < totalConvertibleNotes; noteIndex++){
-      //    var cap = convertibleNotes[noteIndex].cap;
-      //    var discount = convertibleNotes[noteIndex].discount;
-      //    var totalInvestors = convertibleNotes[noteIndex].investors.length;
-      //    for(var investorIndex = 0; investorIndex < totalInvestors; investorIndex++){
-      //        $log.log('Convertible Note Investor ' + noteIndex  + ' ' + investorIndex);
-      //        var investorName = convertibleNotes[noteIndex].investors[investorIndex].name;
-      //        var amount = convertibleNotes[noteIndex].investors[investorIndex].amount;
-      //        //determine we should use the cap or discount for this investor
-      //        var equity = Math.max(
-      //            (amount * ((100-discount)/100) / preMoneyValuation),
-      //            (amount / Math.min(cap, preMoneyValuation))
-      //        );
-      //        equityForEachPartyAfterSeriesA.push({
-      //            name: convertibleNotes[noteIndex].investors[investorIndex].name + ' - CN @ $' + convertibleNotes[noteIndex].cap + ' cap',
-      //            equity: equity*100
-      //        });
-      //        equityGivenAwayByConvertibleNotes += equity;
-      //    }
-      //};
-      //var dilutionBeforeSeriesA = (1 - equityGivenAwayByConvertibleNotes);
-      ////dilute founders for CNs
-      //var totalFounders = founders.length;
-      //for(var founderIndex = 0; founderIndex < totalFounders; founderIndex++){
-      //    $log.log('founder ' + founderIndex);
-      //    equityForEachPartyAfterSeriesA.push({
-      //        name: founders[founderIndex].name + ' - Founder',
-      //        equity: founders[founderIndex].equity * dilutionBeforeSeriesA
-      //    });
-      //}
-      //
-      ////start figuring out the equity rounds
-      //var totalEquityRounds = equityRounds.length;
-      //for(var equityRoundIndex = 0; equityRoundIndex < totalEquityRounds; equityRoundIndex++){
-      //    //determine dilution for this round and dilute everyone
-      //    var dilution = equityRounds[equityRoundIndex].preMoneyValuation / (equityRounds[equityRoundIndex].preMoneyValuation + startup.totalRaisedForRound(equityRoundIndex));
-      //    var totalParties = equityForEachPartyAfterSeriesA.length;
-      //    for(var partiesIndex = 0; partiesIndex < totalParties; partiesIndex++){
-      //        equityForEachPartyAfterSeriesA[partiesIndex].equity = dilution * equityForEachPartyAfterSeriesA[partiesIndex].equity;
-      //    }
-      //    //add each investor from this equity round into the array
-      //    var totalEquityRoundInvestors = equityRounds[equityRoundIndex].investors.length;
-      //    for(var equityRoundInvestorIndex = 0; equityRoundInvestorIndex < totalEquityRoundInvestors; equityRoundInvestorIndex++){
-      //        $log.log('equity investor ' + equityRoundIndex + ' ' + equityRoundInvestorIndex);
-      //        equityForEachPartyAfterSeriesA.push({
-      //            name: equityRounds[equityRoundIndex].investors[equityRoundInvestorIndex].name, 
-      //            equity: 100 * (equityRounds[equityRoundIndex].investors[equityRoundInvestorIndex].amount / (equityRounds[equityRoundIndex].preMoneyValuation + equityRounds[equityRoundIndex].amount))
-      //        });
-      //    }
-      //}
-      //equityForEachPartyAfterSeriesA = sortByKey(equityForEachPartyAfterSeriesA, 'equity');
+      equityForEachParty = sortByKey(equityForEachParty, 'equity');
       //return the equity for everyone after the SeriesA
-      return equityForEachPartyAfterSeriesA;
+      return equityForEachParty;
     };
 
     return startup;

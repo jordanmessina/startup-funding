@@ -94,6 +94,7 @@ angular.module('fundingApp')
 angular.module('fundingApp')
  .controller('FinalEquityCtrl', ['$scope', '$log', 'startupService', function ($scope, $log, startupService) {
      $scope.equityHolders = [];
+     $scope.equityRounds = startupService.equityRounds;
 
      $scope.$watch(function(){
       return startupService
