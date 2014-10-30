@@ -1,17 +1,20 @@
-<h4 ng-show="founders.length">Equity Rounds</h4>
+<div class="title-input">
 
-<form name="equityRoundForm" ng-show="founders.length" ng-submit="equityRoundForm.$valid && addEquityRound()" nonvalidate>
-  <div class="row">
-    <div class="input-group">
-      <input type="number" ng-model="newEquityRound.preMoneyValuation" placeholder="Pre-Money Valuation (in millions. eg - 15000000)" class="form-control" required>
-      <span class="input-group-btn">
-        <input type="submit" class="btn btn-primary" value="Add">
-      </span>
+  <h3 ng-show="founders.length">Equity Rounds</h3>
+  <p ng-show="founders.length">Enter all equity rounds' pre-money valuation. After an equity round is created, you can add investors to that round. The first equity round you enter should be the Series A, and that's what the convertible notes will convert at.</p> 
+  <form name="equityRoundForm" class="input-form" ng-show="founders.length" ng-submit="equityRoundForm.$valid && addEquityRound()" nonvalidate>
+    <div class="row">
+      <div class="input-group">
+        <div class="vcenter"><input type="number" ng-model="newEquityRound.preMoneyValuation" placeholder="Pre-Money Valuation" class="form-control" required></div>
+        <div class="vcenter">
+          <span class="input-group-btn">
+            <input type="submit" class="btn btn-primary" value="Add">
+          </span>
+        </div>
+      </div>
     </div>
-  </div>
-</form>
-<p></p>
-
+  </form>
+</div>
 <table class="table" ng-show="equityRounds.length">
   <thead>
     <td>Pre-Money Valuation</td>

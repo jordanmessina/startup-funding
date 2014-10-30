@@ -1,18 +1,22 @@
-<h4 ng-show="founders.length">Convertible Notes</h4>
+<div class="title-input">
 
-<form name="convertibleNoteForm" ng-show="founders.length" ng-submit="convertibleNoteForm.$valid && addConvertibleNote()" nonvalidate>
-  <div class="row">
-    <div class="input-group">
-      <input type="number" ng-model="newConvertibleNote.cap" placeholder="Convertible Note Cap (in millions. eg - 4000000)" class="form-control" required>
-      <input type="number" ng-model="newConvertibleNote.discount" placeholder="Convertible Note Discount %" class="form-control" required>
-      <span class="input-group-btn">
-        <input type="submit" class="btn btn-primary" value="Add">
-      </span>
+    <h3 ng-show="founders.length">Convertible Notes</h3>
+    <p ng-show="founders.length">Add all outstanding convertible notes. Don't use short form for the cap, for instance, if you have a $4 million cap, put 4000000. Once you create the convertible note, you can add investors and the amount they invested.</p>
+  
+  <form name="convertibleNoteForm" class="input-form" ng-show="founders.length" ng-submit="convertibleNoteForm.$valid && addConvertibleNote()" nonvalidate>
+    <div class="row">
+      <div class="input-group">
+        <div class="vcenter"><input type="number" ng-model="newConvertibleNote.cap" placeholder="Cap" class="form-control" required></div>
+        <div class="vcenter"><input type="number" ng-model="newConvertibleNote.discount" placeholder="Discount %" class="form-control" required></div>
+        <div class="vcenter">
+          <span class="input-group-btn">
+            <input type="submit" class="btn btn-primary" value="Add">
+          </span>
+        </div>
+      </div>
     </div>
-  </div>
-</form>
-<p></p>
-
+  </form>
+</div>  
 <table class="table" ng-show="convertibleNotes.length">
   <thead>
     <td>Cap</td>
