@@ -3,7 +3,7 @@
 <form name="convertibleNoteForm" ng-show="founders.length" ng-submit="convertibleNoteForm.$valid && addConvertibleNote()" nonvalidate>
   <div class="row">
     <div class="input-group">
-      <input type="number" ng-model="newConvertibleNote.cap" placeholder="Convertible Note Cap (in millions. eg - 4000000" class="form-control" required>
+      <input type="number" ng-model="newConvertibleNote.cap" placeholder="Convertible Note Cap (in millions. eg - 4000000)" class="form-control" required>
       <input type="number" ng-model="newConvertibleNote.discount" placeholder="Convertible Note Discount %" class="form-control" required>
       <span class="input-group-btn">
         <input type="submit" class="btn btn-primary" value="Add">
@@ -13,7 +13,7 @@
 </form>
 <p></p>
 
-<table class="table table-striped" ng-show="convertibleNotes.length">
+<table class="table" ng-show="convertibleNotes.length">
   <thead>
     <td>Cap</td>
     <td>Discount</td>
@@ -40,7 +40,7 @@
           </form>
         </span>
     </td>
-    <td><button type="button" class="btn btn-danger" ng-click="removeConvertibleNote($index)">X</button></td>
+    <td><button type="button" class="btn btn-delete" ng-click="removeConvertibleNote($index)">X</button></td>
   </tr>
   <tr>
     <td><strong>{{totalSeedInvestmentRaised() | currency:"$":0}} Raised From Convertible Notes</strong></td>

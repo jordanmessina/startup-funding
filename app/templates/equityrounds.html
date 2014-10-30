@@ -3,7 +3,7 @@
 <form name="equityRoundForm" ng-show="founders.length" ng-submit="equityRoundForm.$valid && addEquityRound()" nonvalidate>
   <div class="row">
     <div class="input-group">
-      <input type="number" ng-model="newEquityRound.preMoneyValuation" placeholder="Pre-Money Valuation (in millions. eg - 4000000" class="form-control" required>
+      <input type="number" ng-model="newEquityRound.preMoneyValuation" placeholder="Pre-Money Valuation (in millions. eg - 15000000)" class="form-control" required>
       <span class="input-group-btn">
         <input type="submit" class="btn btn-primary" value="Add">
       </span>
@@ -12,7 +12,7 @@
 </form>
 <p></p>
 
-<table class="table table-striped" ng-show="equityRounds.length">
+<table class="table" ng-show="equityRounds.length">
   <thead>
     <td>Pre-Money Valuation</td>
     <td>Investors</td>
@@ -37,7 +37,7 @@
           </form>
         </span>
     </td>
-    <td><button type="button" class="btn btn-danger" ng-click="removeEquityRound($index)">X</button></td>
+    <td><button type="button" class="btn btn-delete" ng-click="removeEquityRound($index)">X</button></td>
   </tr>
   <tr>
     <td><strong>{{totalRaised() | currency:"$":0}} Raised Total</strong></td>

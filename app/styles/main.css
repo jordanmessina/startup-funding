@@ -1,79 +1,75 @@
-/* Space out content a bit */
 body {
-  padding-top: 20px;
-  padding-bottom: 20px;
+  background-color: #4BA2E6;
+  color: #FFFFFF;
+  font-family: 'Lato', sans-serif;
 }
 
-/* Everything but the jumbotron gets side spacing for mobile first views */
-.header,
-.marketing,
-.footer {
-  padding-left: 15px;
-  padding-right: 15px;
+body a:link, body a:visited, body a:hover, body a:active { color:#FFFFFF; }
+
+body p{
+  font-size: 1.2em;
 }
 
-/* Custom page header */
-.header {
-  border-bottom: 1px solid #e5e5e5;
-}
-/* Make the masthead heading the same height as the navigation */
-.header h3 {
-  margin-top: 0;
-  margin-bottom: 0;
-  line-height: 40px;
-  padding-bottom: 19px;
+.main-header {
+  margin: 50px 0px 30px;
 }
 
-/* Custom page footer */
-.footer {
-  padding-top: 19px;
-  color: #777;
-  border-top: 1px solid #e5e5e5;
+.main-paragraph {
+  margin-bottom: 50px;
 }
 
-/* Customize container */
-@media (min-width: 768px) {
-  .container {
-    max-width: 730px;
-  }
-}
-.container-narrow > hr {
-  margin: 30px 0;
+.main-header h1{
+  font-family: 'Roboto', sans-serif;
+  color: #FEE82A;
+  font-weight: 900;
 }
 
-/* Main marketing message and sign up button */
-.jumbotron {
-  text-align: center;
-  border-bottom: 1px solid #e5e5e5;
-}
-.jumbotron .btn {
-  font-size: 21px;
-  padding: 14px 24px;
+#coin {
+  height: 25px;
+  margin: 10px 5px 0px 0px;
 }
 
-/* Supporting marketing content */
-.marketing {
-  margin: 40px 0;
-}
-.marketing p + h4 {
-  margin-top: 28px;
+.vcenter {
+  display: inline-block;
+  vertical-align: middle;
+  float: none;
 }
 
-/* Responsive: Portrait tablets and up */
-@media screen and (min-width: 768px) {
-  /* Remove the padding we set earlier */
-  .header,
-  .marketing,
-  .footer {
-    padding-left: 0;
-    padding-right: 0;
-  }
-  /* Space out the masthead */
-  .header {
-    margin-bottom: 30px;
-  }
-  /* Remove the bottom border on the jumbotron for visual effect */
-  .jumbotron {
-    border-bottom: 0;
-  }
+input[type="text"], input[type="number"], textarea {
+  background-color: #AAC4F0;
+  color: #FFFFFF;
+  font-family: 'Lato', sans-serif;
+}
+
+.form-control::-webkit-input-placeholder { /* WebKit browsers */
+  color: #FFFFFF;
+  font-family: 'Lato', sans-serif;
+}
+.form-control:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+  color: #FFFFFF;
+  font-family: 'Lato', sans-serif;
+  opacity:  1;
+}
+.form-control::-moz-placeholder { /* Mozilla Firefox 19+ */
+  color: #FFFFFF;
+  font-family: 'Lato', sans-serif;
+  opacity:  1;
+}
+.form-control:-ms-input-placeholder { /* Internet Explorer 10+ */
+  color: #FFFFFF;
+  font-family: 'Lato', sans-serif;
+}
+
+.btn-delete {
+  color: #fff;
+  background-color: #D0607A;
+  border-color: #AB4F64;
+}
+
+.section-div {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.title-input {
 }
