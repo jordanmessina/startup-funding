@@ -5,11 +5,11 @@
   
   <form name="convertibleNoteForm" class="input-form" ng-show="founders.length" ng-submit="convertibleNoteForm.$valid && addConvertibleNote()" nonvalidate>
     <div class="row">
-      <div class="input-group">
-        <div class="vcenter"><input type="number" ng-model="newConvertibleNote.cap" placeholder="Cap" class="form-control" required></div>
-        <div class="vcenter"><input type="number" ng-model="newConvertibleNote.discount" placeholder="Discount %" class="form-control" required></div>
+      <div>
+        <div class="vcenter input-element"><input type="number" ng-model="newConvertibleNote.cap" placeholder="Cap" class="form-control" required></div>
+        <div class="vcenter input-element"><input type="number" ng-model="newConvertibleNote.discount" placeholder="Discount %" class="form-control" required></div>
         <div class="vcenter">
-          <span class="input-group-btn">
+          <span>
             <input type="submit" class="btn btn-primary" value="Add">
           </span>
         </div>

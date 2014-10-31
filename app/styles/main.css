@@ -41,6 +41,10 @@ input[type="text"], input[type="number"], textarea {
   font-family: 'Lato', sans-serif;
 }
 
+.input-element {
+  margin-right: 15px;
+}
+
 .form-control::-webkit-input-placeholder { /* WebKit browsers */
   color: #FFFFFF;
   font-family: 'Lato', sans-serif;
