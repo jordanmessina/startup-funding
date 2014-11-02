@@ -21,23 +21,41 @@
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
+    <div class="modal fade" id="infoModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            <h4 class="modal-title">What's going on here?</h4>
+          </div><!-- .modal-header -->
+          <div class="modal-body">
+            <p>This is a simple tool that shows the mechanics of convertible notes vs. equity rounds, and how they affect each other.</p>
+            <p>Admittedly, funding is more complicated than this. However, I wish a simple tool like this existed for myself in the past so I could quickly grok the basics.</p>
+          </div><!-- .modal-body -->
+        </div><!-- .modal-content -->
+      </div><!-- .modal-dialog -->
+    </div><!-- .modal -->
+    
+    <nav class="navbar navbar-default" role="navigation">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">
+            <img src="images/coin.png">
+            Startup Funding
+          </a>
+        </div><!-- .navbar-header -->
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#" data-toggle="modal" data-target="#infoModal">What the?</a></li>
+        </ul><!-- .navbar-nav -->
+      </div><!-- .container-fluid -->
+    </nav><!-- .navbar -->
+
+    <ul class="nav nav-pills data-nav" role="tablist">
+      <li role="presentation" class="active"><a href="#">People</a></li>
+      <li role="presentation"><a href="#">Investments</a></li>
+    </ul>
     <!-- Add your site or application content here -->
     <div class="container">
-      <div class="row main-header">
-        <div class="col-md-8 col-md-offset-2">
-          <div class="vcenter">
-            <img src="images/coin.png" id="coin">
-          </div>
-          <div class="vcenter">
-            <h1>Startup Funding</h1>
-          </div>
-        </div>
-      </div>
-      <div class="row main-paragraph">
-        <div class="col-md-8 col-md-offset-2">
-          <p>This is a simple tool that shows the mechanics of convertible notes vs. equity rounds, and how they affect each other. Admittedly, funding is more complicated than this. However, I wish a simple tool like this existed for myself in the past so I could quickly grok the basics.</p>
-        </div>
-      </div>
       <div class="row">
         <div class="col-md-8 col-md-offset-2 section-div">
           <div startup-founders ng-controller="FoundersCtrl"></div>
@@ -58,9 +76,9 @@
           <div final-equity ng-controller="FinalEquityCtrl"></div>
         </div>
       </div>
-    </div>
+    </div><!-- .container -->
 
-    <a href="https://github.com/jordanmessina/startup-funding"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+    <!-- <a href="https://github.com/jordanmessina/startup-funding"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a> -->
     <!--[if lt IE 9]>
     <script src="bower_components/es5-shim/es5-shim.js"></script>
     <script src="bower_components/json3/lib/json3.min.js"></script>
