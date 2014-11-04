@@ -25,6 +25,26 @@ angular.module('fundingApp')
     }    
   });
 
+
+angular.module('fundingApp')
+  .controller('InvestorsCtrl', ['$scope', '$log', 'startupService', function ($scope, $log, startupService) {
+    $scope.investors = startupService.investors;
+    $scope.addInvestor = function () {
+      startupService.addInvestor($scope.newInvestor);
+      $scope.newInvestor = {};
+    };
+    $scope.removeInvestor = function (index){
+      startupService.removeInvestor(index);
+    };
+  }])
+  .directive('startupInvestors', function (){
+    return {
+      templateUrl: 'templates/investors.html'
+    }    
+  });
+
+
+
 angular.module('fundingApp')
   .controller('ConvertibleNotesCtrl', ['$scope', '$log', 'startupService', function ($scope, $log, startupService) {
     $scope.founders = startupService.founders;

@@ -19,7 +19,8 @@ function sortByKey(array, key) {
 angular.module('fundingApp')
   .factory('startupService', ['$log', function($log) {
     var startup = { 
-      founders: [], 
+      founders: [],
+      investors: [],
       convertibleNotes: [], 
       equityRounds: []  
     };
@@ -34,7 +35,7 @@ angular.module('fundingApp')
     };  
     startup.foundersLength = function () {
       return startup.founders.length;
-    };  
+    };
     startup.totalFounderEquity = function() {
       var totalEquity = 0;
       var totalFounders = startup.founders.length;
@@ -45,6 +46,17 @@ angular.module('fundingApp')
         totalEquity += startup.founders[i].equity; 
       }   
       return totalEquity;
+    };
+
+    //investors
+    startup.addInvestor = function (investor) {
+      startup.investors.push(investor);
+    };
+    startup.removeInvestor = function (index) {
+      startup.investors.splice(index, 1); 
+    };  
+    startup.investorsLength = function () {
+      return startup.investors.length;
     };
 
     //convertible notes
