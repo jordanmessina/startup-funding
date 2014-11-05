@@ -36,6 +36,15 @@ angular.module('fundingApp')
     $scope.removeInvestor = function (index){
       startupService.removeInvestor(index);
     };
+    $scope.noDuplicateInvestors = function() {
+      var investorsLength = $scope.investors.length;
+      for (var investorIndex = 0; investorIndex < investorsLength; investorIndex++) {
+        if ($scope.investors[investorIndex].name == $scope.newInvestor.name) {
+          return false;
+        }
+      }
+      return true;
+    }
   }])
   .directive('startupInvestors', function (){
     return {
@@ -48,7 +57,9 @@ angular.module('fundingApp')
 angular.module('fundingApp')
   .controller('ConvertibleNotesCtrl', ['$scope', '$log', 'startupService', function ($scope, $log, startupService) {
     $scope.founders = startupService.founders;
+    $scope.investors = startupService.investors;
     $scope.convertibleNotes = startupService.convertibleNotes;
+    $scope.getInvestorNameByIndex = startupService.getInvestorNameByIndex;
     $scope.addConvertibleNote = function () {
       startupService.addConvertibleNote($scope.newConvertibleNote);
       $scope.newConvertibleNote = {};
@@ -81,6 +92,7 @@ angular.module('fundingApp')
 angular.module('fundingApp')
   .controller('EquityRoundsCtrl', ['$scope', '$log', 'startupService', function ($scope, $log, startupService) {
     $scope.founders = startupService.founders;
+    $scope.investors = startupService.investors;
     $scope.equityRounds = startupService.equityRounds;
     $scope.addEquityRound = function () {
       startupService.addEquityRound($scope.newEquityRound);

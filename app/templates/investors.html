@@ -2,7 +2,7 @@
   <small><a href="#" data-toggle="modal" data-target="#personsModal"><span class="glyphicon glyphicon-new-window"></span></a></small>
 </h4>
 
-<form class="form-inline" ng-submit="addInvestor()">
+<form class="form-inline" ng-submit="noDuplicateInvestors() && addInvestor()">
   <input class="form-control form-control-single" type="text" ng-model="newInvestor.name" placeholder="Investor Name" required>
   <input class="btn btn-primary" type="submit" value="Add">
 </form>

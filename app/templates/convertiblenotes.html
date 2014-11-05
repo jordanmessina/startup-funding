@@ -11,7 +11,7 @@
 <div class="table table-bordered" ng-show="convertibleNotes.length" ng-repeat="cn in convertibleNotes">
   <div class="table-header">
     <div class="table-cell table-cell-full">
-      {{cn.cap | currency:"$":0}} @ {{cn.discount}}%
+      {{cn.cap | currency:"$":0}} cap @ {{cn.discount}}% discount
     </div><!-- .table-cell -->
     <button type="button" class="table-row-delete" ng-click="removeConvertibleNote($index)"><span aria-hidden="true">×</span></button>
   </div><!-- .table-header -->
@@ -19,7 +19,10 @@
   <div class="table-row">
     <div class="table-cell table-cell-control">
       <form class="form-inline" name="addInvestorToConvertibleNoteForm" ng-submit="addInvestorToConvertibleNoteForm.$valid && addInvestorToConvertibleNote($index)">
-        <input class="form-control form-control-large" type="text" ng-model="$parent.investorToAddToConvertibleNote.name" placeholder="Name" required>
+        <select class="form-control form-control-large" ng-model="$parent.investorToAddToConvertibleNote.name" required>
+          <option value="" disabled selected>Investor</option>
+          <option value="{{investor.name}}" ng-repeat="investor in investors">{{investor.name}}</option>
+        </select>
         <input class="form-control form-control-small" type="number" ng-model="$parent.investorToAddToConvertibleNote.amount" placeholder="Amount" min="0" required>
         <input class="btn btn-default" type="submit" value="Add">
       </form>
@@ -31,14 +34,14 @@
       {{investor.name}}
     </div><!-- .table-cell -->
     <div class="table-cell table-cell-small">
-      ${{investor.amount | currency:"$":0}}
+      {{investor.amount | currency:"$":0}}
     </div><!-- .table-cell -->
     <button type="button" class="table-row-delete" ng-click="removeInvestorFromConvertibleNote($parent.$index, $index)"><span aria-hidden="true">×</span></button>
   </div><!-- .table-row -->
 
   <div class="table-footer">
     <div class="table-cell">
-      {{totalSeedInvestmentRaised() | currency:"$":0}} Raised From Convertible Notes
+      {{totalSeedInvestmentRaised() | currency:"$":0}} Raised From Convertible Note
     </div><!-- .table-cell -->
   </div><!-- .table-footer -->
 </div><!-- .table table-border -->

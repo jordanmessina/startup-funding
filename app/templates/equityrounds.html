@@ -10,7 +10,7 @@
 <div class="table" ng-show="equityRounds.length" ng-repeat="equityRound in equityRounds">
   <div class="table-header">
     <div class="table-cell">
-      {{equityRound.preMoneyValuation | currency:"$":0}} Valuation
+      {{equityRound.preMoneyValuation | currency:"$":0}} Pre-Money Valuation
     </div><!-- .table-cell -->
     <button type="button" class="table-row-delete" ng-click="removeEquityRound($index)"><span aria-hidden="true">×</span></button>
   </div><!-- .table-header -->
@@ -18,7 +18,11 @@
   <div class="table-row">
     <div class="table-cell table-cell-control">
       <form class="form-inline" name="addInvestorToEquityRoundForm" ng-submit="addInvestorToEquityRoundForm.$valid && addInvestorToEquityRound($index)">
-        <input class="form-control form-control-large" type="text" ng-model="$parent.investorToAddToEquityRound.name" placeholder="Name" required>
+        <select class="form-control form-control-large" ng-model="$parent.investorToAddToEquityRound.name" required>
+          <option value="" disabled selected>Investor</option>
+          <option value="{{investor.name}}" ng-repeat="investor in investors">{{ investor.name }}</option>
+        </select>
+
         <input class="form-control form-control-small" type="number" ng-model="$parent.investorToAddToEquityRound.amount" placeholder="Amount" min="0" required>
         <input type="submit" class="btn btn-primary" value="Add">
       </form>
@@ -37,7 +41,7 @@
 
   <div class="table-footer">
     <div class="table-cell">
-      {{totalRaised() | currency:"$":0}} Raised Total
+      {{totalRaised() | currency:"$":0}} Post-Money Valuation
     </div><!-- .table-cell -->
   </div><!-- .table-footer -->
 </div><!-- .table -->
