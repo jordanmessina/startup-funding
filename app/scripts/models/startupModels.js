@@ -323,5 +323,43 @@ Startup.prototype.capTable = function() {
       }
     );
   }
+
+  //any other equity rounds
+  var totalEquityRoundsAfterSeriesA = this.equityRounds.length - 1;
+  if (totalEquityRoundsAfterSeriesA > 0) {
+    for(var equityRoundIndex = 1; equityRoundIndex <= totalEquityRoundsAfterSeriesA; equityRoundIndex++) {
+      var preMoneyValuation = this.equityRounds[equityRoundIndex].preMoneyValuation;
+      var totalRaisedForSeriesX = this.equityRounds[equityRoundIndex].totalInvestment(); 
+      var totalEquityGivenUpAtSeriesX = (totalRaisedForSeriesX / (totalRaisedForSeriesX + preMoneyValuation))*100;
+      var seriesXInvestorsLength = this.equityRounds[equityRoundIndex].investments.length;
+      //dilute everyone first...
+      var capTableLength = capTable.length;
+      for (var capTableIndex = 0; capTableIndex < capTableLength; capTableIndex++) {
+        capTable[capTableIndex].equity = capTable[capTableIndex].equity*((100-totalEquityGivenUpAtSeriesX)/100)
+      }
+      for (var investmentIndex = 0; investmentIndex < seriesXInvestorsLength; investmentIndex++){
+        var investment = this.equityRounds[equityRoundIndex].investments[investmentIndex];
+        var equity = (investment.amount / (totalRaisedForSeriesX + preMoneyValuation))*100;
+        var capTableLength = capTable.length;
+        var capTableIndexOf = -1;
+        for(var capTableIndex = 0; capTableIndex < capTableLength; capTableIndex++) {
+          if(capTable[capTableIndex].person === investment.investor) {
+            capTableIndexOf = capTableIndex;
+          } 
+        }
+        if(capTableIndexOf != -1) { // already in the cap table, just add the equity
+          capTable[capTableIndexOf].equity += equity;
+        } else { // not currently in the cap table, create new entry
+          capTable.push(
+            {
+              person: investment.investor,
+              equity: equity
+            }
+          )
+        }
+      }
+    }
+  }
+
   return sortByKey(capTable, 'equity');
 }
