@@ -3,13 +3,13 @@
 </h4>
 
 
-<div class="table" ng-show="equityRounds.length && founders.length">
-  <div class="table-row" ng-repeat="party in equityHolders">
+<div class="table" ng-show="founders.length">
+  <div class="table-row" ng-repeat="entity in startupService.capTable">
     <div class="table-cell table-cell-large">
-      {{party.name}}
+      {{entity.person.name}}
     </div><!-- .table-cell -->
     <div class="table-cell table-cell-small">
-      {{party.equity}}%
+      {{ entity.equity | number:2 }}%
     </div><!-- .table-cell -->
   </div><!-- .table-row -->
 

@@ -18,9 +18,9 @@
   <div class="table-row">
     <div class="table-cell table-cell-control">
       <form class="form-inline" name="addInvestorToEquityRoundForm" ng-submit="addInvestorToEquityRoundForm.$valid && addInvestorToEquityRound($index)">
-        <select class="form-control form-control-large" ng-model="$parent.investorToAddToEquityRound.name" required>
+        <select class="form-control form-control-large" ng-model="$parent.investorToAddToEquityRound.investor" required>
           <option value="" disabled selected>Investor</option>
-          <option value="{{investor.name}}" ng-repeat="investor in investors">{{ investor.name }}</option>
+          <option value="{{$index}}" ng-repeat="investor in investors">{{ investor.name }}</option>
         </select>
 
         <input class="form-control form-control-small" type="number" ng-model="$parent.investorToAddToEquityRound.amount" placeholder="Amount" min="0" required>
@@ -29,12 +29,12 @@
     </div><!-- .table-cell -->
   </div><!-- .table-row -->
 
-  <div class="table-row" ng-show="showInvestorList != $index" ng-repeat="investor in equityRound.investors">
+  <div class="table-row" ng-show="showInvestorList != $index" ng-repeat="investment in equityRound.investments">
     <div class="table-cell table-cell-large">
-      {{investor.name}}
+      {{investment.investor.name}}
     </div><!-- .table-cell -->
     <div class="table-cell table-cell-small">
-      {{investor.amount | currency:"$":0}}
+      {{investment.amount | currency:"$":0}}
     </div><!-- .table-cell -->
     <button type="button" class="table-row-delete" ng-click="removeInvestorFromEquityRound($parent.$index, $index)"><span aria-hidden="true">×</span></button>
   </div><!-- .table-row -->

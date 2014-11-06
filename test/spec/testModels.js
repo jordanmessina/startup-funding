@@ -153,7 +153,68 @@ describe("A Startup", function() {
     expect(startup.equityRounds.length).toEqual(1);
   });
 
-  it("should be able to determine equity after rounds of funding", function() {
+  it("should be able to gather all investors", function() {
+    var startup = new Startup();
+    var investor1 = new Investor('Sama');
+    var investor2 = new Investor('PG');
+    var investor3 = new Investor('PaulToo');
+    var convertibleNote = new ConvertibleNote(5000000, 20);
+    var equityRound = new EquityRound(15000000);
+    startup.addConvertibleNote(convertibleNote);
+    startup.addEquityRound(equityRound);
+    convertibleNote.addInvestor(investor1, 20000);
+    startup.gatherInvestors();
+    expect(startup.investors.length).toEqual(1);
+    convertibleNote.addInvestor(investor2, 20000);
+    startup.gatherInvestors();
+    expect(startup.investors.length).toEqual(2);
+    equityRound.addInvestor(investor3, 200000);
+    equityRound.addInvestor(investor2, 200000);
+    startup.gatherInvestors();
+    expect(startup.investors.length).toEqual(3);
+  });
 
+  it("should be able to determine equity after rounds of funding", function() {
+    var startup = new Startup();
+    var founder1 = new Founder('Jomessin', 25);
+    var founder2 = new Founder('Tommy', 25);
+    var founder3 = new Founder('Janice', 25);
+    var founder4 = new Founder('Lindsey', 25);
+    startup.addFounder(founder1);
+    startup.addFounder(founder2);
+    startup.addFounder(founder3);
+    startup.addFounder(founder4);
+    var investor1 = new Investor('JCal');
+    var investor2 = new Investor('JTriest');
+    var investor3 = new Investor('BrettD');
+    var investor4 = new Investor('Timmy F');
+    var investor5 = new Investor('Bobby Graz');
+    var investor6 = new Investor('Sean Ammir');
+    var convertibleNote1 = new ConvertibleNote(4000000, 20);
+    var convertibleNote2 = new ConvertibleNote(10000000, 10);
+    var equityRound = new EquityRound(15000000);
+    startup.addConvertibleNote(convertibleNote1);
+    startup.addConvertibleNote(convertibleNote2);
+    startup.addEquityRound(equityRound);
+    convertibleNote1.addInvestor(investor1, 500000);
+    convertibleNote1.addInvestor(investor2, 500000);
+    convertibleNote2.addInvestor(investor1, 250000);
+    convertibleNote2.addInvestor(investor2, 250000);
+    convertibleNote2.addInvestor(investor3, 250000);
+    convertibleNote2.addInvestor(investor4, 250000)
+    var capTable = startup.capTable();
+    expect(capTable.length).toEqual(8);
+    expect(capTable[0].equity).toEqual(25);
+    expect(capTable[1].equity).toEqual(25);
+    expect(capTable[2].equity).toEqual(25);
+    expect(capTable[3].equity).toEqual(25);
+    expect(capTable[4].equity).toEqual(0);
+    expect(capTable[5].equity).toEqual(0);
+    expect(capTable[6].equity).toEqual(0);
+    expect(capTable[7].equity).toEqual(0);
+    equityRound.addInvestor(investor5, 5000000);
+    capTable = startup.capTable();
+    expect(capTable.length).toEqual(9);
+    expect(capTable[0].equity).toEqual(25);
   });
 });

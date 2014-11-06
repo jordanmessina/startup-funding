@@ -9,15 +9,17 @@
  */
 angular.module('fundingApp')
   .controller('FoundersCtrl', ['$scope', '$log', 'startupService', function ($scope, $log, startupService) {
-    $scope.founders = startupService.founders;
+    $scope.founders = startupService.startup.founders;
     $scope.addFounder = function () {
-      startupService.addFounder($scope.newFounder);
+      startupService.startup.addFounder($scope.newFounder);
       $scope.newFounder = {};
+      startupService.updateCapTable();
     };
     $scope.removeFounder = function (index){
-      startupService.removeFounder(index);
+      startupService.startup.removeFounder($scope.founders[index]);
+      startupService.updateCapTable();
     };
-    $scope.totalFounderEquity = startupService.totalFounderEquity;
+    $scope.totalFounderEquity = startupService.startup.totalFounderEquity;
   }])
   .directive('startupFounders', function (){
     return {
@@ -30,11 +32,12 @@ angular.module('fundingApp')
   .controller('InvestorsCtrl', ['$scope', '$log', 'startupService', function ($scope, $log, startupService) {
     $scope.investors = startupService.investors;
     $scope.addInvestor = function () {
-      startupService.addInvestor($scope.newInvestor);
+      startupService.investors.push(new Investor($scope.newInvestor.name));
       $scope.newInvestor = {};
     };
     $scope.removeInvestor = function (index){
-      startupService.removeInvestor(index);
+      startupService.startup.removeInvestor($scope.investors[index]);
+      startupService.investors.splice(index, 1);
     };
     $scope.noDuplicateInvestors = function() {
       var investorsLength = $scope.investors.length;
@@ -49,39 +52,45 @@ angular.module('fundingApp')
   .directive('startupInvestors', function (){
     return {
       templateUrl: 'templates/investors.html'
-    }    
+    }
   });
 
 
 
 angular.module('fundingApp')
   .controller('ConvertibleNotesCtrl', ['$scope', '$log', 'startupService', function ($scope, $log, startupService) {
-    $scope.founders = startupService.founders;
+    $scope.founders = startupService.startup.founders;
     $scope.investors = startupService.investors;
-    $scope.convertibleNotes = startupService.convertibleNotes;
-    $scope.getInvestorNameByIndex = startupService.getInvestorNameByIndex;
+    $scope.convertibleNotes = startupService.startup.convertibleNotes;
+    
     $scope.addConvertibleNote = function () {
-      startupService.addConvertibleNote($scope.newConvertibleNote);
+      startupService.startup.addConvertibleNote(
+        new ConvertibleNote($scope.newConvertibleNote.cap, $scope.newConvertibleNote.discount)
+      );
       $scope.newConvertibleNote = {};
     };
+
     $scope.removeConvertibleNote = function (index){
-      startupService.removeConvertibleNote(index);
+      startupService.startup.removeConvertibleNote($scope.convertibleNotes[index]);
+      startupService.updateCapTable();
     };
 
     //investors using the note
-    $scope.showInvestorList = null;
-    $scope.toggleShowInvestorList = function (index) {
-      $scope.showInvestorList = index;
-    };
     $scope.addInvestorToConvertibleNote = function (index){
-      startupService.addInvestorToConvertibleNote(index, $scope.investorToAddToConvertibleNote);
+      startupService.startup.convertibleNotes[index].addInvestor(
+        $scope.investors[$scope.investorToAddToConvertibleNote.investor],
+        $scope.investorToAddToConvertibleNote.amount
+      );
       $scope.investorToAddToConvertibleNote = {};
-      $scope.toggleShowInvestorList(null);
+      startupService.updateCapTable();
     };
-    $scope.removeInvestorFromConvertibleNote = function(cnIndex, investorIndex){
-      startupService.removeInvestorFromConvertibleNote(cnIndex, investorIndex);
+
+    $scope.removeInvestorFromConvertibleNote = function(cnIndex, investmentIndex){
+      var cn = $scope.convertibleNotes[cnIndex]
+      cn.deleteInvestment(cn.investments[investmentIndex]);
+      startupService.updateCapTable();
     };
-    $scope.totalSeedInvestmentRaised = startupService.totalSeedInvestmentRaised;
+
   }])
   .directive('convertibleNotes', function (){
     return {
@@ -91,30 +100,36 @@ angular.module('fundingApp')
 
 angular.module('fundingApp')
   .controller('EquityRoundsCtrl', ['$scope', '$log', 'startupService', function ($scope, $log, startupService) {
-    $scope.founders = startupService.founders;
+    $scope.founders = startupService.startup.founders;
     $scope.investors = startupService.investors;
-    $scope.equityRounds = startupService.equityRounds;
+    $scope.equityRounds = startupService.startup.equityRounds;
+    
     $scope.addEquityRound = function () {
-      startupService.addEquityRound($scope.newEquityRound);
-      $scope.newEquityRound = {}; 
-    };  
+      startupService.startup.addEquityRound(new EquityRound($scope.newEquityRound.preMoneyValuation));
+      $scope.newEquityRound = {};
+    };
+
     $scope.removeEquityRound = function (index){
-      startupService.removeEquityRound(index);
-    };  
+      startupService.startup.removeEquityRound($scope.equityRounds[index]);
+      startupService.updateCapTable();
+    };
 
     //investors using the note
-    $scope.showInvestorList = null;
-    $scope.toggleShowInvestorList = function (index) {
-      $scope.showInvestorList = index;
-    };  
     $scope.addInvestorToEquityRound = function (index){
-      startupService.addInvestorToEquityRound(index, $scope.investorToAddToEquityRound);
-      $scope.investorToAddToEquityRound = {}; 
-      $scope.toggleShowInvestorList(null);
-    };  
-    $scope.removeInvestorFromEquityRound = function(cnIndex, investorIndex){
-      startupService.removeInvestorFromEquityRound(cnIndex, investorIndex);
-    };  
+      startupService.startup.equityRounds[index].addInvestor(
+        $scope.investors[$scope.investorToAddToEquityRound.investor],
+        $scope.investorToAddToEquityRound.amount
+      );
+      $scope.investorToAddToEquityRound = {};
+      startupService.updateCapTable();
+    };
+
+    $scope.removeInvestorFromEquityRound = function(equityRoundIndex, investmentIndex){
+      var equityRound = $scope.equityRounds[equityRoundIndex]
+      equityRound.deleteInvestment(equityRound.investments[investmentIndex]);
+      startupService.updateCapTable();
+    };
+
     $scope.totalRaised = startupService.totalRaised;
   }]) 
   .directive('equityRounds', function (){ 
@@ -125,14 +140,8 @@ angular.module('fundingApp')
 
 angular.module('fundingApp')
  .controller('FinalEquityCtrl', ['$scope', '$log', 'startupService', function ($scope, $log, startupService) {
-     $scope.equityHolders = [];
-     $scope.equityRounds = startupService.equityRounds;
-
-     $scope.$watch(function(){
-      return startupService
-     }, function(){
-      $scope.equityHolders = startupService.calculateEquity()
-     }, true);
+    $scope.founders = startupService.startup.founders;
+    $scope.startupService = startupService;
  }])
  .directive('finalEquity', function () {
   return {
