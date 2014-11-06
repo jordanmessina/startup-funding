@@ -1,18 +1,24 @@
-<div ng-show="equityRounds.length">
-  <h3>Equity Breakdown</h3>
-  
-  <table class="table">
-    <thead>
-      <td>Name</td>
-      <td>Equity (%)</td>
-    </thead>
-    <tr ng-repeat="party in equityHolders">
-      <td>{{party.name}}</td>
-      <td>{{party.equity}}%</td>
-    </tr>
-    <tr>
-      <td><strong>Total</strong></td>
-      <td><strong>100%</strong></td>
-    </tr>
-  </table>
-</div>
+<h4 class="form-section-header">Equity Breakdown
+  <small><a href="#" data-toggle="modal" data-target="#finalEquity"><span class="glyphicon glyphicon-new-window"></span></a></small>
+</h4>
+
+
+<div class="table" ng-show="founders.length">
+  <div class="table-row" ng-repeat="entity in startupService.capTable">
+    <div class="table-cell table-cell-large">
+      {{entity.person.name}}
+    </div><!-- .table-cell -->
+    <div class="table-cell table-cell-small">
+      {{ entity.equity | number:2 }}%
+    </div><!-- .table-cell -->
+  </div><!-- .table-row -->
+
+  <div class="table-footer">
+    <div class="table-cell table-cell-large">
+      TOTAL
+    </div><!-- .table-cell -->
+    <div class="table-cell table-cell-small">
+      100%
+    </div><!-- .table-cell -->
+  </div><!-- .table-footer -->
+</div><!-- .table -->

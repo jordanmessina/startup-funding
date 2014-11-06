@@ -1,51 +1,47 @@
-<div class="title-input">
+<h4 class="form-section-header">Equity Rounds
+  <small><a href="#" data-toggle="modal" data-target="#equityModal"><span class="glyphicon glyphicon-new-window"></span></a></small>
+</h4>
+ 
+<form class="form-inline" name="equityRoundForm" ng-submit="equityRoundForm.$valid && addEquityRound()" nonvalidate>
+  <input class="form-control form-control-single" type="number" ng-model="newEquityRound.preMoneyValuation" placeholder="Pre-Money Valuation" required>
+  <input class="btn btn-primary" type="submit" value="Add">
+</form>
 
-  <h3 ng-show="founders.length">Equity Rounds</h3>
-  <p ng-show="founders.length">Enter all equity rounds' pre-money valuation. After an equity round is created, you can add investors to that round. The first equity round you enter should be the Series A, and that's what the convertible notes will convert at.</p> 
-  <form name="equityRoundForm" class="input-form" ng-show="founders.length" ng-submit="equityRoundForm.$valid && addEquityRound()" nonvalidate>
-    <div class="row">
-      <div>
-        <div class="vcenter input-element"><input type="number" ng-model="newEquityRound.preMoneyValuation" placeholder="Pre-Money Valuation" class="form-control" required></div>
-        <div class="vcenter">
-          <span>
-            <input type="submit" class="btn btn-primary" value="Add">
-          </span>
-        </div>
-      </div>
-    </div>
-  </form>
-</div>
-<table class="table" ng-show="equityRounds.length">
-  <thead>
-    <td>Pre-Money Valuation</td>
-    <td>Investors</td>
-    <td></td>
-  </thead>
-  <tr ng-repeat="equityRound in equityRounds">
-    <td><input type="number" ng-model="equityRound.preMoneyValuation" class="form-control" step="250000"></td>
-    <td>
-        <span ng-show="showInvestorList != $index">
-            <ul>
-              <li ng-repeat="investor in equityRound.investors">
-                <input type="text" ng-model="investor.name"> <input type="number" ng-model="investor.amount" min="0" step="100000"> <a href="#" ng-click="removeInvestorFromEquityRound($parent.$index, $index)">x</a>
-              </li>
-              <li><a href="#" ng-click="toggleShowInvestorList($index)">Add Investor</a></li>
-            </ul>
-        </span>
-        <span ng-show="showInvestorList == $index">
-          <form name="addInvestorToEquityRoundForm" ng-submit="addInvestorToEquityRoundForm.$valid && addInvestorToEquityRound($index)">
-            <input type="text" ng-model="$parent.investorToAddToEquityRound.name" placeholder="Name" class="form-control" required>
-            <input type="number" ng-model="$parent.investorToAddToEquityRound.amount" placeholder="Amount" class="form-control" min="0" required>
-            <input type="submit" class="btn btn-primary" value="Add">
-          </form>
-        </span>
-    </td>
-    <td><button type="button" class="btn btn-delete" ng-click="removeEquityRound($index)">X</button></td>
-  </tr>
-  <tr>
-    <td><strong>{{totalRaised() | currency:"$":0}} Raised Total</strong></td>
-    <td><strong></strong></td>
-    <td></td>
-    <td></td>
-  </tr>
-</table>
+<div class="table" ng-show="equityRounds.length" ng-repeat="equityRound in equityRounds">
+  <div class="table-header">
+    <div class="table-cell">
+      {{equityRound.preMoneyValuation | currency:"$":0}} Pre-Money Valuation
+    </div><!-- .table-cell -->
+    <button type="button" class="table-row-delete" ng-click="removeEquityRound($index)"><span aria-hidden="true">×</span></button>
+  </div><!-- .table-header -->
+
+  <div class="table-row">
+    <div class="table-cell table-cell-control">
+      <form class="form-inline" name="addInvestorToEquityRoundForm" ng-submit="addInvestorToEquityRoundForm.$valid && addInvestorToEquityRound($index)">
+        <select class="form-control form-control-large" ng-model="$parent.investorToAddToEquityRound.investor" required>
+          <option value="" disabled selected>Investor</option>
+          <option value="{{$index}}" ng-repeat="investor in investors">{{ investor.name }}</option>
+        </select>
+
+        <input class="form-control form-control-small" type="number" ng-model="$parent.investorToAddToEquityRound.amount" placeholder="Amount" min="0" required>
+        <input type="submit" class="btn btn-primary" value="Add">
+      </form>
+    </div><!-- .table-cell -->
+  </div><!-- .table-row -->
+
+  <div class="table-row" ng-show="showInvestorList != $index" ng-repeat="investment in equityRound.investments">
+    <div class="table-cell table-cell-large">
+      {{investment.investor.name}}
+    </div><!-- .table-cell -->
+    <div class="table-cell table-cell-small">
+      {{investment.amount | currency:"$":0}}
+    </div><!-- .table-cell -->
+    <button type="button" class="table-row-delete" ng-click="removeInvestorFromEquityRound($parent.$index, $index)"><span aria-hidden="true">×</span></button>
+  </div><!-- .table-row -->
+
+  <div class="table-footer">
+    <div class="table-cell">
+        {{equityRound.totalInvestment() + equityRound.preMoneyValuation | currency:"$":0}} Post-Money Valuation
+    </div><!-- .table-cell -->
+  </div><!-- .table-footer -->
+</div><!-- .table -->
