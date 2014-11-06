@@ -283,9 +283,11 @@ Startup.prototype.capTable = function() {
     for (var investmentIndex = 0; investmentIndex < noteInvestorsLength; investmentIndex++) {
       var investment = this.convertibleNotes[notesIndex].investments[investmentIndex];
       var equity = Math.max(
-        (investment.amount * ((100-discount)/100) / preMoneyValuation)*100,
+        (investment.amount / (((100-discount)/100)*preMoneyValuation))*100,
         (investment.amount / Math.min(cap, preMoneyValuation))*100
       );
+      //dilution from series A
+      equity *= (100 - totalEquityGivenUpAtSeriesA)/100
       //check if investor is already in the cap table
       var capTableLength = capTable.length;
       var capTableIndexOf = -1;
