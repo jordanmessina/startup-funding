@@ -10,6 +10,7 @@
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="bower_components/intro.js/introjs.css" />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -101,28 +102,29 @@
             <img src="images/coin.png">
             Startup Funding
           </h1>
-          <div class="row panel-collapse collapse in" id="intro" role="intro" aria-labelledby="intro">
+          <div class="row panel-collapse collapse in" id="intro" role="intro" aria-labelledby="intro" ng-intro-options="TutorialOptions" ng-controller="TutorialCtrl">
             <div class="col-md-6">
               <p>This is a simple tool that demonstrates the mechanics of Convertible Notes and Equity Rounds, and shows how they affect each other.</p>
+              <p>If you're hear to learn about Convertible Notes and Equity Rounds, a great first step is using the <a href="#" ng-click="startTutorial()">interactive tutorial.</a>
               <p>Admittedly, funding is more complicated than this, but this is a great way to understand the basics. <a data-toggle="collapse" href="#intro" aria-expanded="true" aria-controls="intro">Got It.</a></p>
             </div><!-- .col-md-4 -->
           </div><!-- .row -->
 
           <div class="row">
             <div class="col-md-6">
-              <div class="form-section" startup-founders ng-controller="FoundersCtrl"></div>
-              <div class="form-section" startup-investors ng-controller="InvestorsCtrl"></div>
+              <div class="form-section" startup-founders ng-controller="FoundersCtrl" id="foundersTutorial"></div>
+              <div class="form-section" startup-investors ng-controller="InvestorsCtrl" id="investorsTutorial"></div>
             </div><!-- .col-md-6 -->
 
             <div class="col-md-6">
-              <div class="form-section" convertible-notes ng-controller="ConvertibleNotesCtrl"></div>
-              <div class="form-section" equity-rounds ng-controller="EquityRoundsCtrl"></div>
+              <div class="form-section" convertible-notes ng-controller="ConvertibleNotesCtrl" id="convertibleNotesTutorial"></div>
+              <div class="form-section" equity-rounds ng-controller="EquityRoundsCtrl" id="equityTutorial"></div>
             </div><!-- .col-md-6 -->
           </div><!-- .row -->
         </div><!-- .col-md-8 -->
 
         <div class="col-md-4 equity-breakdown-panel">
-          <div final-equity ng-controller="FinalEquityCtrl"></div>
+          <div final-equity ng-controller="FinalEquityCtrl" id="finalEquityTutorial"></div>
         </div><!-- .col-md-4 -->
       </div><!-- .row -->
     </div><!-- .container -->
@@ -145,6 +147,8 @@
     <script src="bower_components/angular-animate/angular-animate.js"></script>
     <script src="bower_components/angular-touch/angular-touch.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/intro.js/intro.js"></script>
+    <script src="bower_components/angular-intro.js/src/angular-intro.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
