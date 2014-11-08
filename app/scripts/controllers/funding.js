@@ -44,7 +44,8 @@ angular.module('fundingApp')
         }
       ],
       showStepNumbers: false,
-      tooltipClass: 'fundingTutorial'
+      highlightClass: 'funding-tutorial-highlight',
+      tooltipClass: 'funding-tutorial-tooltip'
     });
 
     $scope.setupFoundersTutorial = function() {
