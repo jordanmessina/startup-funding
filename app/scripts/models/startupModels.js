@@ -178,8 +178,20 @@ Startup.prototype.removeFounder = function(founder){
   }
 }
 
+Startup.prototype.removeFounders = function() {
+  while (this.founders.length != 0) {
+    this.removeFounder(this.founders[0]);
+  }
+}
+
 Startup.prototype.removeInvestor = function(investor) {
   investor.deleteInvestments();
+}
+
+Startup.prototype.removeInvestors = function() {
+  while (this.investors.length != 0) {
+    this.removeInvestor(this.investors[0]);
+  }
 }
 
 Startup.prototype.gatherInvestors = function() {
@@ -223,6 +235,12 @@ Startup.prototype.removeConvertibleNote = function(convertibleNote) {
   }
 }
 
+Startup.prototype.removeConvertibleNotes = function() {
+  while (this.convertibleNotes.length != 0) {
+    this.removeConvertibleNote(this.convertibleNotes[0]);
+  }
+}
+
 Startup.prototype.addEquityRound = function(equityRound) {
   if (this.equityRounds.indexOf(equityRound) == -1){
     this.equityRounds.push(equityRound);
@@ -234,6 +252,12 @@ Startup.prototype.removeEquityRound = function(equityRound) {
   if (index != -1){
     equityRound.deleteInvestments();
     this.equityRounds.splice(index, 1);
+  }
+}
+
+Startup.prototype.removeEquityRounds = function() {
+  while (this.equityRounds.length != 0) {
+    this.removeEquityRound(this.equityRounds[0]);
   }
 }
 

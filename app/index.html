@@ -102,11 +102,13 @@
             <img src="images/coin.png">
             Startup Funding
           </h1>
+          <!-- Go to www.addthis.com/dashboard to customize your tools -->
+          <div class="addthis_sharing_toolbox"></div>
           <div class="row panel-collapse collapse in" id="intro" role="intro" aria-labelledby="intro" ng-intro-options="TutorialOptions" ng-controller="TutorialCtrl">
             <div class="col-md-6">
               <p>This is a simple tool that demonstrates the mechanics of Convertible Notes and Equity Rounds, and shows how they affect each other.</p>
               <p>If you're hear to learn about Convertible Notes and Equity Rounds, a great first step is using the <a href="#" ng-click="startTutorial()">interactive tutorial.</a>
-              <p>Admittedly, funding is more complicated than this, but this is a great way to understand the basics. <a data-toggle="collapse" href="#intro" aria-expanded="true" aria-controls="intro">Got It.</a></p>
+              <p>Admittedly, funding is more complicated than this, but this is a great way to understand the basics. <a data-toggle="collapse" href="#intro" aria-expanded="true" aria-controls="intro" id="gotIt">Got It.</a></p>
             </div><!-- .col-md-4 -->
           </div><!-- .row -->
 
@@ -158,5 +160,18 @@
         <script src="scripts/services/startup.js"></script>
         <script src="scripts/controllers/funding.js"></script>
         <!-- endbuild -->
+    <!-- Go to www.addthis.com/dashboard to customize your tools -->
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-545e31a36db6367a" async="async"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    
+      ga('create', 'UA-4330805-5', 'auto');
+      ga('send', 'pageview');
+    
+    </script>
+
 </body>
 </html>

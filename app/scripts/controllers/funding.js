@@ -9,7 +9,7 @@
  */
 
 angular.module('fundingApp')
-  .controller('TutorialCtrl', ['$scope', '$log', 'startupService', function ($scope, $log, startupService) {
+  .controller('TutorialCtrl', ['$scope', '$rootScope', '$log', 'startupService', function ($scope, $rootScope, $log, startupService) {
     $scope.startupService = startupService
     $scope.tutorial = introJs();
     $scope.tutorial.setOptions({
@@ -44,57 +44,83 @@ angular.module('fundingApp')
         }
       ],
       showStepNumbers: false,
-      tooltipClass: 'fundingTutorial'
+      highlightClass: 'funding-tutorial-highlight',
+      tooltipClass: 'funding-tutorial-tooltip'
     });
 
     $scope.setupFoundersTutorial = function() {
-      //clean up startup
-      while($scope.startupService.startup.founders.length != 0) {
-        $scope.startupService.startup.removeFounder($scope.startupService.startup.founders[0]);
+      //redundant, but if we hit "Back" in the tutorial we need to reset the state
+      startupService.startup.removeFounders();
+      startupService.startup.removeConvertibleNotes();
+      startupService.startup.removeEquityRounds();
+      while(startupService.investors.length != 0) {
+        startupService.investors.splice(0,1);
       }   
-      while($scope.startupService.startup.convertibleNotes.length != 0) {
-        $scope.startupService.startup.removeConvertibleNote($scope.startupService.startup.convertibleNotes[0]);
-      }   
-      while($scope.startupService.startup.equityRounds.length != 0) {
-        $scope.startupService.startup.removeEquityRound($scope.startupService.startup.equityRounds[0]);
-      }
-      while($scope.startupService.investors.length != 0) {
-        $scope.startupService.investors.splice(0,1);
-      }
       startupService.updateCapTable(); //this is garbage
+      startupService.startup.addFounder(new Founder('Grace', 31));
+      startupService.startup.addFounder(new Founder('Merideth', 31));
+      startupService.startup.addFounder(new Founder('Danielle', 31));
+      startupService.startup.addFounder(new Founder('YC', 7));
+      startupService.updateCapTable();
+      $rootScope.$broadcast('TutorialUpdate');
     }
 
     $scope.setupInvestorsTutorial = function() {
-      console.log('investors setup');
+      //clean up startup
+      startupService.startup.removeConvertibleNotes();
+      startupService.startup.removeEquityRounds();
+      while(startupService.investors.length != 0) {
+        startupService.investors.splice(0,1);
+      }
+      startupService.investors.push(new Investor('J Cal'));
+      startupService.investors.push(new Investor('Naval'));
+      startupService.investors.push(new Investor('Marissa'));
+      startupService.investors.push(new Investor('K Rose'));
+      startupService.investors.push(new Investor('YC VC'));
+      startupService.investors.push(new Investor('a16z'));
+      startupService.updateCapTable(); //this is garbage
+      $rootScope.$broadcast('TutorialUpdate');
     }
 
     $scope.setupConvertibleNotesTutorial = function() {
-      console.log('cns setup');
+      //clean up startup
+      startupService.startup.removeConvertibleNotes();
+      startupService.startup.removeEquityRounds();
+      var cn = new ConvertibleNote(5000000, 20);
+      cn.addInvestor(startupService.investors[0], 50000);
+      cn.addInvestor(startupService.investors[1], 75000);
+      cn.addInvestor(startupService.investors[2], 100000);
+      cn.addInvestor(startupService.investors[3], 200000);
+      startupService.startup.addConvertibleNote(cn);
+      cn = new ConvertibleNote(10000000, 10);
+      cn.addInvestor(startupService.investors[4], 100000);
+      startupService.startup.addConvertibleNote(cn);
+      startupService.updateCapTable();
+      $rootScope.$broadcast('TutorialUpdate');
     }
 
     $scope.setupEquityTutorial = function() {
-      console.log('equityRound setup');
+      startupService.startup.removeEquityRounds();
+      var equityRound = new EquityRound(4000000);
+      equityRound.addInvestor(startupService.investors[5], 1000000);
+      startupService.startup.addEquityRound(equityRound);
+      startupService.updateCapTable();
+      $rootScope.$broadcast('TutorialUpdate');
     }
 
     $scope.setupFinalEquityTutorial = function() {
-      console.log('final equity setup');
     }
 
     $scope.startTutorial = function() {
+      $('#gotIt').click();
       //clean up startup
-      while($scope.startupService.startup.founders.length != 0) {
-        $scope.startupService.startup.removeFounder($scope.startupService.startup.founders[0]);
+      startupService.startup.removeFounders();
+      startupService.startup.removeConvertibleNotes();
+      startupService.startup.removeEquityRounds();
+      while(startupService.investors.length != 0) {
+        startupService.investors.splice(0,1);
       }
-      while($scope.startupService.startup.convertibleNotes.length != 0) {
-        $scope.startupService.startup.removeConvertibleNote($scope.startupService.startup.convertibleNotes[0]);
-      }
-      while($scope.startupService.startup.equityRounds.length != 0) {
-        $scope.startupService.startup.removeEquityRound($scope.startupService.startup.equityRounds[0]);
-      }
-      while($scope.startupService.investors.length != 0) {
-        $scope.startupService.investors.splice(0,1);
-      }
-
+      startupService.updateCapTable(); //this is garbage
 
       $scope.tutorial.start().onbeforechange(function(targetElem){
         switch($(targetElem).attr('id')){
@@ -109,18 +135,25 @@ angular.module('fundingApp')
   }])
 
 angular.module('fundingApp')
-  .controller('FoundersCtrl', ['$scope', '$log', 'startupService', function ($scope, $log, startupService) {
+  .controller('FoundersCtrl', ['$scope', '$rootScope', '$log', 'startupService', function ($scope, $rootScope, $log, startupService) {
     $scope.founders = startupService.startup.founders;
+
     $scope.addFounder = function () {
       startupService.startup.addFounder($scope.newFounder);
       $scope.newFounder = {};
       startupService.updateCapTable();
     };
+
     $scope.removeFounder = function (index){
       startupService.startup.removeFounder($scope.founders[index]);
       startupService.updateCapTable(); //this is garbage
     };
+
     $scope.totalFounderEquity = startupService.startup.totalFounderEquity;
+
+    $rootScope.$on('TutorialUpdate', function() {
+      $scope.$apply();
+    });
   }])
   .directive('startupFounders', function (){
     return {
@@ -130,17 +163,20 @@ angular.module('fundingApp')
 
 
 angular.module('fundingApp')
-  .controller('InvestorsCtrl', ['$scope', '$log', 'startupService', function ($scope, $log, startupService) {
+  .controller('InvestorsCtrl', ['$scope', '$rootScope', '$log', 'startupService', function ($scope, $rootScope, $log, startupService) {
     $scope.investors = startupService.investors;
+
     $scope.addInvestor = function () {
       startupService.investors.push(new Investor($scope.newInvestor.name));
       $scope.newInvestor = {};
     };
+
     $scope.removeInvestor = function (index){
       startupService.startup.removeInvestor($scope.investors[index]);
       startupService.investors.splice(index, 1);
       startupService.updateCapTable(); //this is garbage
     };
+
     $scope.noDuplicateInvestors = function() {
       var investorsLength = $scope.investors.length;
       for (var investorIndex = 0; investorIndex < investorsLength; investorIndex++) {
@@ -150,6 +186,11 @@ angular.module('fundingApp')
       }
       return true;
     }
+
+    $rootScope.$on('TutorialUpdate', function() {
+      $scope.$apply();
+    });
+
   }])
   .directive('startupInvestors', function (){
     return {
@@ -160,7 +201,7 @@ angular.module('fundingApp')
 
 
 angular.module('fundingApp')
-  .controller('ConvertibleNotesCtrl', ['$scope', '$log', 'startupService', function ($scope, $log, startupService) {
+  .controller('ConvertibleNotesCtrl', ['$scope', '$rootScope', '$log', 'startupService', function ($scope, $rootScope, $log, startupService) {
     $scope.founders = startupService.startup.founders;
     $scope.investors = startupService.investors;
     $scope.convertibleNotes = startupService.startup.convertibleNotes;
@@ -193,6 +234,10 @@ angular.module('fundingApp')
       startupService.updateCapTable(); //this is garbage
     };
 
+    $rootScope.$on('TutorialUpdate', function() {
+      $scope.$apply();
+    });
+
   }])
   .directive('convertibleNotes', function (){
     return {
@@ -201,7 +246,7 @@ angular.module('fundingApp')
   });
 
 angular.module('fundingApp')
-  .controller('EquityRoundsCtrl', ['$scope', '$log', 'startupService', function ($scope, $log, startupService) {
+  .controller('EquityRoundsCtrl', ['$scope', '$rootScope', '$log', 'startupService', function ($scope, $rootScope, $log, startupService) {
     $scope.founders = startupService.startup.founders;
     $scope.investors = startupService.investors;
     $scope.equityRounds = startupService.startup.equityRounds;
@@ -233,6 +278,11 @@ angular.module('fundingApp')
     };
 
     $scope.totalRaised = startupService.totalRaised;
+
+    $rootScope.$on('TutorialUpdate', function() {
+      $scope.$apply();
+    });
+
   }]) 
   .directive('equityRounds', function (){ 
     return {
@@ -241,9 +291,14 @@ angular.module('fundingApp')
   });
 
 angular.module('fundingApp')
- .controller('FinalEquityCtrl', ['$scope', '$log', 'startupService', function ($scope, $log, startupService) {
+ .controller('FinalEquityCtrl', ['$scope', '$rootScope', '$log', 'startupService', function ($scope, $rootScope, $log, startupService) {
     $scope.founders = startupService.startup.founders;
     $scope.startupService = startupService; //strange binding issue with angular where it wouldn't do 2 way data binding on startupService.capTable. This is my workaround.
+
+    $rootScope.$on('TutorialUpdate', function() {
+      $scope.$apply();
+    });
+
  }])
  .directive('finalEquity', function () {
   return {
