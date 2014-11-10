@@ -10,7 +10,7 @@
 <div class="table" ng-show="equityRounds.length" ng-repeat="equityRound in equityRounds">
   <div class="table-header">
     <div class="table-cell">
-      {{equityRound.preMoneyValuation | currency:"$":0}} Pre-Money Valuation
+      {{equityRound.preMoneyValuation | currency:"$":0}} Pre-Money <span class="hidden-xs">Valuation</span>
     </div><!-- .table-cell -->
     <button type="button" class="table-row-delete" ng-click="removeEquityRound($index)"><span aria-hidden="true">×</span></button>
   </div><!-- .table-header -->
@@ -41,7 +41,7 @@
 
   <div class="table-footer">
     <div class="table-cell">
-        {{equityRound.totalInvestment() + equityRound.preMoneyValuation | currency:"$":0}} Post-Money Valuation
+        {{equityRound.totalInvestment() + equityRound.preMoneyValuation | currency:"$":0}} Post-Money <span class="hidden-xs">Valuation</span>
     </div><!-- .table-cell -->
   </div><!-- .table-footer -->
 </div><!-- .table -->
