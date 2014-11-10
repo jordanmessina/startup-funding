@@ -15,9 +15,6 @@ angular.module('fundingApp')
     $scope.tutorial.setOptions({
       steps: [
         {
-          intro: 'This is an interactive tutorial'
-        },
-        {
           intro: 'This is about the founders',
           element: '#foundersTutorial',
           position: 'right'

@@ -11,7 +11,7 @@
 <div class="table table-bordered convertable-note" ng-show="convertibleNotes.length" ng-repeat="cn in convertibleNotes">
   <div class="table-header">
     <div class="table-cell table-cell-full">
-      $<input class="ghost-control cap-control" type="text" value="{{cn.cap}}" ghostControl> cap at a <input class="ghost-control discount-control" type="text" value="{{cn.discount}}">% discount
+      $<input class="ghost-control cap-control" type="text" ng-model="cn.cap" value="{{cn.cap}}" ghostControl> cap at a <input class="ghost-control discount-control" type="text" ng-model="cn.discount" value="{{cn.discount}}">% discount
     </div><!-- .table-cell -->
     <button type="button" class="table-row-delete" ng-click="removeConvertibleNote($index)"><span aria-hidden="true">×</span></button>
   </div><!-- .table-header -->
@@ -31,10 +31,10 @@
 
   <div class="table-row" ng-show="showInvestorList != $index" ng-repeat="investment in cn.investments">
     <div class="table-cell table-cell-large">
-      <input class="ghost-control ghost-control-full" type="text" value="{{investment.investor.name}}">
+      {{investment.investor.name}}
     </div><!-- .table-cell -->
     <div class="table-cell table-cell-small">
-      <input class="ghost-control ghost-control-full" type="text" value="{{investment.amount}}">
+      <input class="ghost-control ghost-control-full" type="text" ng-model="investment.amount"  value="{{investment.amount}}">
     </div><!-- .table-cell -->
     <button type="button" class="table-row-delete" ng-click="removeInvestorFromConvertibleNote($parent.$index, $index)"><span aria-hidden="true">×</span></button>
   </div><!-- .table-row -->
