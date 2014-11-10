@@ -9,7 +9,9 @@
 
 <div class="table table-bordered" ng-show="investors.length">
   <div class="table-row"  ng-repeat="investor in investors">
-    <div class="table-cell table-cell-single">{{ investor.name }}</div><!-- .table-cell -->
+    <div class="table-cell table-cell-single">
+      <input class="ghost-control ghost-control-full" type="text" value="{{investor.name}}">
+    </div><!-- .table-cell -->
     <button type="button" class="table-row-delete" ng-click="removeInvestor($index)"><span aria-hidden="true">×</span></button>
   </div><!-- .table-row -->
 </div><!-- .table table-border -->

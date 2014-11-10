@@ -114,6 +114,14 @@ p { margin-bottom: 26px; }
 .form-control:-ms-input-placeholder {
    color:    #93C7F0;
 }
+.ghost-control {
+  width: auto;
+  background: transparent;
+  border: none;
+}
+.ghost-control.full {
+  width: 100%;
+}
 
 .form-inline {
   margin-bottom: 15px;
@@ -183,6 +191,9 @@ p { margin-bottom: 26px; }
   box-shadow: none;
   color: #333;
 }
+.table .ghost-control:focus {
+  outline: none;
+}
 .table .btn {
   padding: 3px 8px;
   box-shadow: none;
@@ -235,7 +246,7 @@ p { margin-bottom: 26px; }
   padding: 8px 10px;
   border-right: 1px solid #cecece;
 }
-.table-cell:last-child { border-right: none; }
+.table-row .table-cell:last-child { border-right: none; }
 .table-cell-large {
   width: 60%;
 }
@@ -243,6 +254,10 @@ p { margin-bottom: 26px; }
   width: 40%;
   padding-right: 50px;
   text-align: right;
+}
+.table-cell-single {
+  width: 100%;
+  border-right: none;
 }
 .table-cell-control {
   padding: 5px 8px;
@@ -277,7 +292,7 @@ p { margin-bottom: 26px; }
 }
 .table-footer:after {
     clear: both;
-}
+} 
 
 .table-row-delete {
   position: absolute;
@@ -336,6 +351,10 @@ p { margin-bottom: 26px; }
   bottom: 0;
   left: 0;
   overflow: scroll;
+}
+
+.table-convertable-note .table-header .ghost-control{
+  width: 30%;
 }
 
 

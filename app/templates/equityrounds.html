@@ -31,10 +31,10 @@
 
   <div class="table-row" ng-show="showInvestorList != $index" ng-repeat="investment in equityRound.investments">
     <div class="table-cell table-cell-large">
-      {{investment.investor.name}}
+      <input class="ghost-control ghost-control-full" type="text" value="{{investment.investor.name}}">
     </div><!-- .table-cell -->
     <div class="table-cell table-cell-small">
-      {{investment.amount | currency:"$":0}}
+      <input class="ghost-control ghost-control-full" type="text" value="{{investment.amount}}">
     </div><!-- .table-cell -->
     <button type="button" class="table-row-delete" ng-click="removeInvestorFromEquityRound($parent.$index, $index)"><span aria-hidden="true">×</span></button>
   </div><!-- .table-row -->
