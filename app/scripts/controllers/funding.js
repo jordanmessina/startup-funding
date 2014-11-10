@@ -44,6 +44,7 @@ angular.module('fundingApp')
         }
       ],
       showStepNumbers: false,
+      disableInteraction: false,
       highlightClass: 'funding-tutorial-highlight',
       tooltipClass: 'funding-tutorial-tooltip'
     });
