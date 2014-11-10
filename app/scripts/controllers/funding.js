@@ -11,40 +11,65 @@
 angular.module('fundingApp')
   .controller('TutorialCtrl', ['$scope', '$rootScope', '$log', 'startupService', function ($scope, $rootScope, $log, startupService) {
     $scope.startupService = startupService;
-    $scope.tutorial = introJs();
-    $scope.tutorial.setOptions({
+    $scope.tutorial = new Tour({
       steps: [
         {
-          intro: 'This is about the founders',
+          content: 'This is about the founders',
           element: '#foundersTutorial',
-          position: 'right'
+          onNext: function() {
+            $scope.setupInvestorsTutorial();
+            $rootScope.$broadcast('TutorialUpdate');
+          }
         },
         {
-          intro: 'This is about the founders',
+          content: 'This is about the founders',
           element: '#investorsTutorial',
-          position: 'right'
+          onNext: function() {
+            $scope.setupConvertibleNotesTutorial();
+            $rootScope.$broadcast('TutorialUpdate');
+          },
+          onPrev: function() {
+            $scope.setupFoundersTutorial();
+            $rootScope.$broadcast('TutorialUpdate');
+          }
         },
         {
-          intro: 'This is about the founders',
+          content: 'This is about the founders',
           element: '#convertibleNotesTutorial',
-          position: 'left'
+          onNext: function() {
+            $scope.setupEquityTutorial();
+            $rootScope.$broadcast('TutorialUpdate');
+          },
+          onPrev: function() {
+            $scope.setupInvestorsTutorial();
+            $rootScope.$broadcast('TutorialUpdate');
+          }
         },
         {
-          intro: 'This is about the founders',
+          content: 'This is about the founders',
           element: '#equityTutorial',
-          position: 'left'
+          onNext: function() {
+            $scope.setupFinalEquityTutorial();
+            $rootScope.$broadcast('TutorialUpdate');
+          },
+          onPrev: function() {
+            $scope.setupConvertibleNotesTutorial();
+            $rootScope.$broadcast('TutorialUpdate');
+          }
         },
         {
-          intro: 'This is about the founders',
+          content: 'This is about the founders',
           element: '#finalEquityTutorial',
-          nextLabel: false
+          onNext: function() {
+          },
+          onPrev: function() {
+            $scope.setupEquityTutorial();
+            $rootScope.$broadcast('TutorialUpdate');
+          }
         }
-      ],
-      showStepNumbers: false,
-      disableInteraction: false,
-      highlightClass: 'funding-tutorial-highlight',
-      tooltipClass: 'funding-tutorial-tooltip'
+      ]
     });
+    $scope.tutorial.init();
 
     $scope.setupFoundersTutorial = function() {
       //redundant, but if we hit "Back" in the tutorial we need to reset the state
@@ -60,7 +85,6 @@ angular.module('fundingApp')
       startupService.startup.addFounder(new Founder('Danielle', 31));
       startupService.startup.addFounder(new Founder('YC', 7));
       startupService.updateCapTable();
-      $rootScope.$broadcast('TutorialUpdate');
     };
 
     $scope.setupInvestorsTutorial = function() {
@@ -77,7 +101,6 @@ angular.module('fundingApp')
       startupService.investors.push(new Investor('YC VC'));
       startupService.investors.push(new Investor('a16z'));
       startupService.updateCapTable(); //this is garbage
-      $rootScope.$broadcast('TutorialUpdate');
     };
 
     $scope.setupConvertibleNotesTutorial = function() {
@@ -94,7 +117,6 @@ angular.module('fundingApp')
       cn.addInvestor(startupService.investors[4], 100000);
       startupService.startup.addConvertibleNote(cn);
       startupService.updateCapTable();
-      $rootScope.$broadcast('TutorialUpdate');
     };
 
     $scope.setupEquityTutorial = function() {
@@ -103,7 +125,6 @@ angular.module('fundingApp')
       equityRound.addInvestor(startupService.investors[5], 1000000);
       startupService.startup.addEquityRound(equityRound);
       startupService.updateCapTable();
-      $rootScope.$broadcast('TutorialUpdate');
     };
 
     $scope.setupFinalEquityTutorial = function() {
@@ -119,16 +140,8 @@ angular.module('fundingApp')
         startupService.investors.splice(0,1);
       }
       startupService.updateCapTable(); //this is garbage
-
-      $scope.tutorial.start().onbeforechange(function(targetElem){
-        switch($(targetElem).attr('id')){
-          case 'foundersTutorial': $scope.setupFoundersTutorial(); break;
-          case 'investorsTutorial': $scope.setupInvestorsTutorial(); break;
-          case 'convertibleNotesTutorial': $scope.setupConvertibleNotesTutorial(); break;
-          case 'equityTutorial': $scope.setupEquityTutorial(); break;
-          case 'finalEquityTutorial': $scope.setupFinalEquityTutorial(); break;
-        }
-      });
+      $scope.setupFoundersTutorial();
+      $scope.tutorial.start(true).goTo(0);
     };
   }]);
 
@@ -293,9 +306,9 @@ angular.module('fundingApp')
   $scope.founders = startupService.startup.founders;
   $scope.startupService = startupService; //strange binding issue with angular where it wouldn't do 2 way data binding on startupService.capTable. This is my workaround.
 
-  $rootScope.$on('TutorialUpdate', function() {
-    $scope.$apply();
-  });
+   $rootScope.$on('TutorialUpdate', function() {
+     $scope.$apply();
+   });
 
 }])
 .directive('finalEquity', function () {
