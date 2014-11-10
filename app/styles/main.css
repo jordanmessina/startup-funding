@@ -115,7 +115,7 @@ p { margin-bottom: 26px; }
    color:    #93C7F0;
 }
 .ghost-control {
-  width: auto;
+  width: 100%;
   background: transparent;
   border: none;
 }
@@ -124,11 +124,21 @@ p { margin-bottom: 26px; }
 }
 
 .form-inline {
+  *zoom: 1;
   margin-bottom: 15px;
+}
+.form-inline:before,
+.form-inline:after {
+    content: " "; /* 1 */
+    display: table; /* 2 */
+}
+.form-inline:after {
+    clear: both;
 }
 
 .form-inline .form-control,
 .form-inline .btn {
+  float: left;
   margin-right: -5px;
   border-radius: 0;
   border-color: #2286C6;
@@ -242,19 +252,26 @@ p { margin-bottom: 26px; }
 .table-cell {
   float: left;
   max-height: 40px;
-  margin-right: -1px;
   padding: 8px 10px;
   border-right: 1px solid #cecece;
 }
-.table-row .table-cell:last-child { border-right: none; }
+.table-row .table-cell:last-child,
+.table-header .table-cell:last-child,
+.table-footer .table-cell:last-child {
+  border-right: none;
+  border-radius: 0 0 4px 0;
+}
+
 .table-cell-large {
   width: 60%;
 }
 .table-cell-small {
   width: 40%;
-  padding-right: 50px;
+  padding-right: 30px;
   text-align: right;
 }
+.table-cell-small input { text-align: right; }
+
 .table-cell-single {
   width: 100%;
   border-right: none;
@@ -352,11 +369,17 @@ p { margin-bottom: 26px; }
   left: 0;
   overflow: scroll;
 }
-
-.table-convertable-note .table-header .ghost-control{
-  width: 30%;
+@media (max-width: 992px) {
+  .input-panel { position: static; }
 }
 
+.convertable-note .table-header .ghost-control{
+  width: 30%;
+  border-bottom: 1px solid #aaa;
+}
+.convertable-note .table-header .discount-control{
+  width: 10%;
+}
 
 
 /* Equity Breakdown Panel
@@ -370,6 +393,12 @@ p { margin-bottom: 26px; }
   background-color: #378BCC;
   border-left: 1px solid #236AA1;
   overflow: scroll;
+}
+@media (max-width: 992px) {
+  .equity-breakdown-panel {
+    position: static;
+    min-height: 400px;
+  }
 }
 
 .equity-breakdown-table {
