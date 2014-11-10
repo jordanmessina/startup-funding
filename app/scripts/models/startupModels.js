@@ -1,10 +1,11 @@
+'use strict';
 
 function sortByKey(array, key) {
-    //from SO http://stackoverflow.com/questions/8837454/sort-array-of-objects-by-single-key-with-date-value
-    return array.sort(function(a, b) {
-        var x = a[key]; var y = b[key];
-        return ((x > y) ? -1 : ((x < y) ? 1 : 0));
-    });
+  //from SO http://stackoverflow.com/questions/8837454/sort-array-of-objects-by-single-key-with-date-value
+  return array.sort(function(a, b) {
+      var x = a[key]; var y = b[key];
+      return ((x > y) ? -1 : ((x < y) ? 1 : 0));
+  });
 }
 
 function Founder(name, equity) {
@@ -19,12 +20,12 @@ function Investor(name) {
 
 Investor.prototype.deleteInvestment = function(investment) {
   var investmentIndex = this.investments.indexOf(investment);
-  if(investmentIndex != -1) {
+  if(investmentIndex !== -1) {
     //always delete the investment from the CN or the Equity Round object
     var investmentTerms = this.investments[investmentIndex].investmentTerms;
     investmentTerms.deleteInvestment(this.investments[investmentIndex]);
   }
-}
+};
 
 Investor.prototype.deleteInvestments = function() {
   while (this.investments.length){
@@ -32,7 +33,7 @@ Investor.prototype.deleteInvestments = function() {
     var investmentTerms = this.investments[0].investmentTerms;
     investmentTerms.deleteInvestment(this.investments[0]);
   }
-}
+};
 
 Investor.prototype.totalInvestment = function() {
   var investmentLength = this.investments.length;
@@ -41,7 +42,7 @@ Investor.prototype.totalInvestment = function() {
     total += this.investments[investmentIndex].amount;
   }
   return total;
-}
+};
 
 function ConvertibleNote(cap, discount){
   this.cap = cap;
@@ -52,27 +53,27 @@ function ConvertibleNote(cap, discount){
 ConvertibleNote.prototype.addInvestor = function(investor, amount){
   //NOTE - this is the only method used to add investors to a CN
   new Investment(investor, this, amount);
-}
+};
 
 ConvertibleNote.prototype.deleteInvestment = function(investment) {
   var investmentIndex = this.investments.indexOf(investment);
-  if(investmentIndex != -1) {
+  if(investmentIndex !== -1) {
     //delete it from the investor first
     var investor = this.investments[investmentIndex].investor; 
     var investorInvestmentIndex = investor.investments.indexOf(investment);
-    if (investorInvestmentIndex != -1) {
+    if (investorInvestmentIndex !== -1) {
       investor.investments.splice(investorInvestmentIndex, 1);
     }
     //delete from the note
     this.investments.splice(investmentIndex, 1); 
   }
-}
+};
 
 ConvertibleNote.prototype.deleteInvestments = function() {
   while (this.investments.length){
     this.deleteInvestment(this.investments[0]);
   }
-}
+};
 
 ConvertibleNote.prototype.totalInvestment = function() {
   var investmentLength = this.investments.length;
@@ -81,7 +82,7 @@ ConvertibleNote.prototype.totalInvestment = function() {
     total += this.investments[investmentIndex].amount;
   }
   return total;
-}
+};
 
 function EquityRound(preMoneyValuation){
   this.preMoneyValuation = preMoneyValuation;
@@ -91,27 +92,27 @@ function EquityRound(preMoneyValuation){
 EquityRound.prototype.addInvestor = function(investor, amount){
   //NOTE - this is the only method used to add investors to an equity round
   new Investment(investor, this, amount);
-}
+};
 
 EquityRound.prototype.deleteInvestment = function(investment) {
   var investmentIndex = this.investments.indexOf(investment);
-  if(investmentIndex != -1) {
+  if(investmentIndex !== -1) {
     //delete it from the investor first
     var investor = this.investments[investmentIndex].investor; 
     var investorInvestmentIndex = investor.investments.indexOf(investment);
-    if (investorInvestmentIndex != -1) {
+    if (investorInvestmentIndex !== -1) {
       investor.investments.splice(investorInvestmentIndex, 1); 
     }   
     //delete from the note
     this.investments.splice(investmentIndex, 1); 
   }
-}
+};
 
 EquityRound.prototype.deleteInvestments = function() {
   while (this.investments.length){
     this.deleteInvestment(this.investments[0]);
   }
-}
+};
 
 EquityRound.prototype.totalInvestment = function() {
   var investmentLength = this.investments.length;
@@ -120,7 +121,7 @@ EquityRound.prototype.totalInvestment = function() {
     total += this.investments[investmentIndex].amount;
   }
   return total;
-}
+};
 
 function Investment(investor, investmentTerms, amount){
   //NOTE - this is the only way that an investment reference should be added to investor.investments / cn.investments / equityRound.investments...
@@ -146,7 +147,7 @@ function Investment(investor, investmentTerms, amount){
 Investment.prototype.deleteInvestment = function() {
   this.investor.deleteInvestment(this);
   this.investmentTerms.deleteInvestment(this);
-}
+};
 
 function Startup() {
   this.founders = [];
@@ -162,37 +163,37 @@ Startup.prototype.totalFounderEquity = function() {
     totalEquity += this.founders[founderIndex].equity;
   }
   return totalEquity;
-}
+};
 
 Startup.prototype.addFounder = function(founder){
   if(this.totalFounderEquity() < 100 && founder.equity + this.totalFounderEquity() <= 100){
     this.founders.push(founder);
     this.founders = sortByKey(this.founders, 'equity');
   }
-}
+};
 
 Startup.prototype.removeFounder = function(founder){
   var founderIndex = this.founders.indexOf(founder);
-  if (founderIndex != -1){
+  if (founderIndex !== -1){
     this.founders.splice(founderIndex, 1);
   }
-}
+};
 
 Startup.prototype.removeFounders = function() {
-  while (this.founders.length != 0) {
+  while (this.founders.length !== 0) {
     this.removeFounder(this.founders[0]);
   }
-}
+};
 
 Startup.prototype.removeInvestor = function(investor) {
   investor.deleteInvestments();
-}
+};
 
 Startup.prototype.removeInvestors = function() {
-  while (this.investors.length != 0) {
+  while (this.investors.length !== 0) {
     this.removeInvestor(this.investors[0]);
   }
-}
+};
 
 Startup.prototype.gatherInvestors = function() {
   var investors = [];
@@ -203,7 +204,7 @@ Startup.prototype.gatherInvestors = function() {
     var investmentsLength = this.convertibleNotes[cnIndex].investments.length;
     for (var investmentIndex = 0; investmentIndex < investmentsLength; investmentIndex++) {
       var tmpInvestor = this.convertibleNotes[cnIndex].investments[investmentIndex].investor;
-      if (investors.indexOf(tmpInvestor) == -1){
+      if (investors.indexOf(tmpInvestor) === -1){
         investors.push(tmpInvestor);
       }
     }
@@ -213,59 +214,59 @@ Startup.prototype.gatherInvestors = function() {
     var investmentsLength = this.equityRounds[equityRoundIndex].investments.length;
     for (var investmentIndex = 0; investmentIndex < investmentsLength; investmentIndex++) {
       var tmpInvestor = this.equityRounds[equityRoundIndex].investments[investmentIndex].investor;
-      if(investors.indexOf(tmpInvestor) == -1) {
+      if(investors.indexOf(tmpInvestor) === -1) {
         investors.push(tmpInvestor);
       }
     }
   }
   this.investors = investors;
-}
+};
 
 Startup.prototype.addConvertibleNote = function(convertibleNote) {
-  if (this.convertibleNotes.indexOf(convertibleNote) == -1){
+  if (this.convertibleNotes.indexOf(convertibleNote) === -1){
     this.convertibleNotes.push(convertibleNote);
   }
-}
+};
 
 Startup.prototype.removeConvertibleNote = function(convertibleNote) {
   var index = this.convertibleNotes.indexOf(convertibleNote);
-  if (index != -1){
+  if (index !== -1){
     convertibleNote.deleteInvestments();
     this.convertibleNotes.splice(index, 1);
   }
-}
+};
 
 Startup.prototype.removeConvertibleNotes = function() {
-  while (this.convertibleNotes.length != 0) {
+  while (this.convertibleNotes.length !== 0) {
     this.removeConvertibleNote(this.convertibleNotes[0]);
   }
-}
+};
 
 Startup.prototype.addEquityRound = function(equityRound) {
-  if (this.equityRounds.indexOf(equityRound) == -1){
+  if (this.equityRounds.indexOf(equityRound) === -1){
     this.equityRounds.push(equityRound);
   }
-}
+};
 
 Startup.prototype.removeEquityRound = function(equityRound) {
   var index = this.equityRounds.indexOf(equityRound);
-  if (index != -1){
+  if (index !== -1){
     equityRound.deleteInvestments();
     this.equityRounds.splice(index, 1);
   }
-}
+};
 
 Startup.prototype.removeEquityRounds = function() {
-  while (this.equityRounds.length != 0) {
+  while (this.equityRounds.length !== 0) {
     this.removeEquityRound(this.equityRounds[0]);
   }
-}
+};
 
 Startup.prototype.capTable = function() {
   this.gatherInvestors();
   var capTable = [];
   // no equity round, convertible notes don't have equity yet.
-  if (this.equityRounds.length == 0 || (this.equityRounds.length != 0 && this.equityRounds[0].investments.length == 0)) {
+  if (this.equityRounds.length === 0 || (this.equityRounds.length !== 0 && this.equityRounds[0].investments.length === 0)) {
     var foundersLength = this.founders.length;
     for (var founderIndex = 0; founderIndex < foundersLength; founderIndex++) {
       capTable.push({
@@ -311,16 +312,16 @@ Startup.prototype.capTable = function() {
         (investment.amount / Math.min(cap, preMoneyValuation))*100
       );
       //dilution from series A
-      equity *= (100 - totalEquityGivenUpAtSeriesA)/100
+      equity *= (100 - totalEquityGivenUpAtSeriesA)/100;
       //check if investor is already in the cap table
       var capTableLength = capTable.length;
       var capTableIndexOf = -1;
       for(var capTableIndex = 0; capTableIndex < capTableLength; capTableIndex++) {
         if(capTable[capTableIndex].person === investment.investor) {
           capTableIndexOf = capTableIndex;
-        } 
+        }
       }
-      if(capTableIndexOf != -1) { // already in the cap table, just add the equity
+      if(capTableIndexOf !== -1) { // already in the cap table, just add the equity
         capTable[capTableIndexOf].equity += equity;
       } else { // not currently in the cap table, create new entry
         capTable.push(
@@ -328,10 +329,10 @@ Startup.prototype.capTable = function() {
             person: investment.investor,
             equity: equity
           }
-        )
+        );
       }
       totalEquityGivenFromNotes += equity;
-    } 
+    }
   }
 
   // founders
@@ -359,7 +360,7 @@ Startup.prototype.capTable = function() {
       //dilute everyone first...
       var capTableLength = capTable.length;
       for (var capTableIndex = 0; capTableIndex < capTableLength; capTableIndex++) {
-        capTable[capTableIndex].equity = capTable[capTableIndex].equity*((100-totalEquityGivenUpAtSeriesX)/100)
+        capTable[capTableIndex].equity = capTable[capTableIndex].equity*((100-totalEquityGivenUpAtSeriesX)/100);
       }
       for (var investmentIndex = 0; investmentIndex < seriesXInvestorsLength; investmentIndex++){
         var investment = this.equityRounds[equityRoundIndex].investments[investmentIndex];
@@ -371,7 +372,7 @@ Startup.prototype.capTable = function() {
             capTableIndexOf = capTableIndex;
           } 
         }
-        if(capTableIndexOf != -1) { // already in the cap table, just add the equity
+        if(capTableIndexOf !== -1) { // already in the cap table, just add the equity
           capTable[capTableIndexOf].equity += equity;
         } else { // not currently in the cap table, create new entry
           capTable.push(
@@ -379,11 +380,11 @@ Startup.prototype.capTable = function() {
               person: investment.investor,
               equity: equity
             }
-          )
+          );
         }
       }
     }
   }
 
   return sortByKey(capTable, 'equity');
-}
+};

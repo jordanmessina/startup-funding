@@ -15,7 +15,7 @@ angular.module('fundingApp')
       investors: [], // this is an array of investors the user creates before assigning to CNs/equity rounds. It's strictly for the presentation layer.
 
       capTable: []
-    }
+    };
 
     startupService.updateCapTable = function(){
       startupService.capTable = startupService.startup.capTable();

@@ -10,36 +10,33 @@
 
 angular.module('fundingApp')
   .controller('TutorialCtrl', ['$scope', '$rootScope', '$log', 'startupService', function ($scope, $rootScope, $log, startupService) {
-    $scope.startupService = startupService
+    $scope.startupService = startupService;
     $scope.tutorial = introJs();
     $scope.tutorial.setOptions({
       steps: [
         {
-          intro: "This is an interactive tutorial"
-        },
-        {
-          intro: "This is about the founders",
-          element: "#foundersTutorial",
+          intro: 'This is about the founders',
+          element: '#foundersTutorial',
           position: 'right'
         },
         {
-          intro: "This is about the founders",
-          element: "#investorsTutorial",
+          intro: 'This is about the founders',
+          element: '#investorsTutorial',
           position: 'right'
         },
         {
-          intro: "This is about the founders",
-          element: "#convertibleNotesTutorial",
+          intro: 'This is about the founders',
+          element: '#convertibleNotesTutorial',
           position: 'left'
         },
         {
-          intro: "This is about the founders",
-          element: "#equityTutorial",
+          intro: 'This is about the founders',
+          element: '#equityTutorial',
           position: 'left'
         },
         {
-          intro: "This is about the founders",
-          element: "#finalEquityTutorial",
+          intro: 'This is about the founders',
+          element: '#finalEquityTutorial',
           nextLabel: false
         }
       ],
@@ -54,9 +51,9 @@ angular.module('fundingApp')
       startupService.startup.removeFounders();
       startupService.startup.removeConvertibleNotes();
       startupService.startup.removeEquityRounds();
-      while(startupService.investors.length != 0) {
+      while(startupService.investors.length !== 0) {
         startupService.investors.splice(0,1);
-      }   
+      }
       startupService.updateCapTable(); //this is garbage
       startupService.startup.addFounder(new Founder('Grace', 31));
       startupService.startup.addFounder(new Founder('Merideth', 31));
@@ -64,13 +61,13 @@ angular.module('fundingApp')
       startupService.startup.addFounder(new Founder('YC', 7));
       startupService.updateCapTable();
       $rootScope.$broadcast('TutorialUpdate');
-    }
+    };
 
     $scope.setupInvestorsTutorial = function() {
       //clean up startup
       startupService.startup.removeConvertibleNotes();
       startupService.startup.removeEquityRounds();
-      while(startupService.investors.length != 0) {
+      while(startupService.investors.length !== 0) {
         startupService.investors.splice(0,1);
       }
       startupService.investors.push(new Investor('J Cal'));
@@ -81,7 +78,7 @@ angular.module('fundingApp')
       startupService.investors.push(new Investor('a16z'));
       startupService.updateCapTable(); //this is garbage
       $rootScope.$broadcast('TutorialUpdate');
-    }
+    };
 
     $scope.setupConvertibleNotesTutorial = function() {
       //clean up startup
@@ -98,7 +95,7 @@ angular.module('fundingApp')
       startupService.startup.addConvertibleNote(cn);
       startupService.updateCapTable();
       $rootScope.$broadcast('TutorialUpdate');
-    }
+    };
 
     $scope.setupEquityTutorial = function() {
       startupService.startup.removeEquityRounds();
@@ -107,10 +104,10 @@ angular.module('fundingApp')
       startupService.startup.addEquityRound(equityRound);
       startupService.updateCapTable();
       $rootScope.$broadcast('TutorialUpdate');
-    }
+    };
 
     $scope.setupFinalEquityTutorial = function() {
-    }
+    };
 
     $scope.startTutorial = function() {
       $('#gotIt').click();
@@ -118,22 +115,22 @@ angular.module('fundingApp')
       startupService.startup.removeFounders();
       startupService.startup.removeConvertibleNotes();
       startupService.startup.removeEquityRounds();
-      while(startupService.investors.length != 0) {
+      while(startupService.investors.length !== 0) {
         startupService.investors.splice(0,1);
       }
       startupService.updateCapTable(); //this is garbage
 
       $scope.tutorial.start().onbeforechange(function(targetElem){
         switch($(targetElem).attr('id')){
-          case "foundersTutorial": $scope.setupFoundersTutorial(); break;
-          case "investorsTutorial": $scope.setupInvestorsTutorial(); break;
-          case "convertibleNotesTutorial": $scope.setupConvertibleNotesTutorial(); break;
-          case "equityTutorial": $scope.setupEquityTutorial(); break;
-          case "finalEquityTutorial": $scope.setupFinalEquityTutorial(); break;
+          case 'foundersTutorial': $scope.setupFoundersTutorial(); break;
+          case 'investorsTutorial': $scope.setupInvestorsTutorial(); break;
+          case 'convertibleNotesTutorial': $scope.setupConvertibleNotesTutorial(); break;
+          case 'equityTutorial': $scope.setupEquityTutorial(); break;
+          case 'finalEquityTutorial': $scope.setupFinalEquityTutorial(); break;
         }
       });
-    }
-  }])
+    };
+  }]);
 
 angular.module('fundingApp')
   .controller('FoundersCtrl', ['$scope', '$rootScope', '$log', 'startupService', function ($scope, $rootScope, $log, startupService) {
@@ -159,7 +156,7 @@ angular.module('fundingApp')
   .directive('startupFounders', function (){
     return {
       templateUrl: 'templates/founders.html'
-    }    
+    };
   });
 
 
@@ -181,12 +178,12 @@ angular.module('fundingApp')
     $scope.noDuplicateInvestors = function() {
       var investorsLength = $scope.investors.length;
       for (var investorIndex = 0; investorIndex < investorsLength; investorIndex++) {
-        if ($scope.investors[investorIndex].name == $scope.newInvestor.name) {
+        if ($scope.investors[investorIndex].name === $scope.newInvestor.name) {
           return false;
         }
       }
       return true;
-    }
+    };
 
     $rootScope.$on('TutorialUpdate', function() {
       $scope.$apply();
@@ -196,7 +193,7 @@ angular.module('fundingApp')
   .directive('startupInvestors', function (){
     return {
       templateUrl: 'templates/investors.html'
-    }
+    };
   });
 
 
@@ -230,7 +227,7 @@ angular.module('fundingApp')
     };
 
     $scope.removeInvestorFromConvertibleNote = function(cnIndex, investmentIndex){
-      var cn = $scope.convertibleNotes[cnIndex]
+      var cn = $scope.convertibleNotes[cnIndex];
       cn.deleteInvestment(cn.investments[investmentIndex]);
       startupService.updateCapTable(); //this is garbage
     };
@@ -243,7 +240,7 @@ angular.module('fundingApp')
   .directive('convertibleNotes', function (){
     return {
       templateUrl: 'templates/convertiblenotes.html'
-    }    
+    };
   });
 
 angular.module('fundingApp')
@@ -284,25 +281,25 @@ angular.module('fundingApp')
       $scope.$apply();
     });
 
-  }]) 
-  .directive('equityRounds', function (){ 
+  }])
+  .directive('equityRounds', function (){
     return {
       templateUrl: 'templates/equityrounds.html'
-    }    
+    };
   });
 
 angular.module('fundingApp')
- .controller('FinalEquityCtrl', ['$scope', '$rootScope', '$log', 'startupService', function ($scope, $rootScope, $log, startupService) {
-    $scope.founders = startupService.startup.founders;
-    $scope.startupService = startupService; //strange binding issue with angular where it wouldn't do 2 way data binding on startupService.capTable. This is my workaround.
+.controller('FinalEquityCtrl', ['$scope', '$rootScope', '$log', 'startupService', function ($scope, $rootScope, $log, startupService) {
+  $scope.founders = startupService.startup.founders;
+  $scope.startupService = startupService; //strange binding issue with angular where it wouldn't do 2 way data binding on startupService.capTable. This is my workaround.
 
-    $rootScope.$on('TutorialUpdate', function() {
-      $scope.$apply();
-    });
+  $rootScope.$on('TutorialUpdate', function() {
+    $scope.$apply();
+  });
 
- }])
- .directive('finalEquity', function () {
+}])
+.directive('finalEquity', function () {
   return {
     templateUrl: 'templates/finalequity.html'
-  }
- });
+  };
+});
