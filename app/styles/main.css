@@ -36,7 +36,7 @@ p { margin-bottom: 26px; }
 }
 
 .app-title {
-  display: relative;
+  position: relative;
   margin-bottom: 30px;
   font-size: 24px;
   color: #FEE82A;
