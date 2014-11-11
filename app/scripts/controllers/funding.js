@@ -34,7 +34,8 @@ angular.module('fundingApp')
           }
         },
         {
-            content: 'A Convertible Note is an investment intrument that can be thought of as an <a href="http://en.wikipedia.org/wiki/IOU">IOU</a> for equity in your company. The convertible notes that your company raises money on will not convert into equity until later in the future when you raise money again at a priced round (more on this in the next section). Convertible Notes have two main properties, a Valuation Cap and a Discount Rate. A valuation cap puts a threshold on the conversion price of the debt. A discount rate is the percentage off the per share price.',
+          placement: 'bottom',
+          content: 'A Convertible Note is an investment intrument that can be thought of as an <a href="http://en.wikipedia.org/wiki/IOU">IOU</a> for equity in your company. The convertible notes that your company raises money on will not convert into equity until later in the future when you raise money again at a priced round (more on this in the next section). Convertible Notes have two main properties, a Valuation Cap and a Discount Rate. A valuation cap puts a threshold on the conversion price of the debt. A discount rate is the percentage off the per share price.',
           element: '#convertibleNotesTutorial',
           onNext: function() {
             $scope.setupEquityTutorial();
@@ -46,7 +47,8 @@ angular.module('fundingApp')
           }
         },
         {
-            content: 'This is where the magic happens. At an equity round (often times called a Series A for the first one, and increasing a letter each subsequent round. eg - Series B, Series C) some investor will take time to determine what they think your company is currently worth. This is known as a Valuation. They will then buy stock from you at that valuation. For example, if <a href="http://a16z.com/">Andreessen Horowitz</a> decides they want to invest in your company, they may decide that your company is currently worth $4,000,000. This would mean each share in the company is worth $4 ($4,000,000 / 1,000,000 shares total). They would then invest money at this valuation, paying $4 per share. For each share purchased, the company would issue new shares, increasing the amount of total shares issued. If Andreessen Horowitz was to invest $1,000,000 into your company, they would purchase 250,000 shares, which would mean there are now 1,250,000 shares, making Andreessen\s ownership stake 20% (250,000/1,000,000) and TODO ',
+          placement: 'top',
+          content: 'This is where the magic happens. At an equity round (often times called a Series A for the first one, and increasing a letter each subsequent round. eg - Series B, Series C) some investor will take time to determine what they think your company is currently worth. This is known as a Valuation. They will then buy stock from you at that valuation. For example, if <a href="http://a16z.com/">Andreessen Horowitz</a> decides they want to invest in your company, they may decide that your company is currently worth $4,000,000. This would mean each share in the company is worth $4 ($4,000,000 / 1,000,000 shares total). They would then invest money at this valuation, paying $4 per share. For each share purchased, the company would issue new shares, increasing the amount of total shares issued. If Andreessen Horowitz was to invest $1,000,000 into your company, they would purchase 250,000 shares, which would mean there are now 1,250,000 shares, making Andreessen\s ownership stake 20% (250,000/1,000,000) and TODO ',
           element: '#equityTutorial',
           onNext: function() {
             $scope.setupFinalEquityTutorial();
@@ -58,6 +60,7 @@ angular.module('fundingApp')
           }
         },
         {
+          placement: 'left',
           content: 'This is about the founders',
           element: '#finalEquityTutorial',
           onNext: function() {
