@@ -11,7 +11,7 @@ body {
 }
 
 .form-section {
-  min-height: 340px;
+  min-height: 240px;
   margin-bottom: 40px;
 }
 
@@ -202,6 +202,23 @@ p { margin-bottom: 26px; }
   background-color: #2286C6;
   box-shadow: 0 2px 0 #2286C6;
   outline: none;
+}
+.btn-default,
+.btn.disabled,
+.btn[disabled],
+fieldset[disabled] .btn {
+  padding: 8px 8px;
+  background: transparent;
+  border-color: #777;
+  box-shadow: 0 2px 0 #777;
+  font-size: 16px;
+}
+.btn-default:hover,
+.btn.disabled:hover,
+.btn[disabled]:hover,
+fieldset[disabled] .btn:hover {
+  background: #eee;
+  border-color: #777;
 }
 
 
@@ -436,3 +453,25 @@ p { margin-bottom: 26px; }
 .equity-breakdown-panel .form-section-header {
   margin-top: 90px;
 }
+
+
+
+/* Bootstrap Intro
+---------------------------------------- */
+
+.intro-popover {
+  width: 500px;
+  max-width: 500px;
+  color: #333;
+  font-size: 14px;
+}
+.intro-popover a,
+.intro-popover a:visited {
+  color: #378BCC;
+}
+.intro-popover .btn {
+  font-size: 14px;
+}
+
+
+
