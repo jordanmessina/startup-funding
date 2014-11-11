@@ -440,20 +440,24 @@ fieldset[disabled] .btn:hover {
     min-height: 400px;
   }
 }
-
-.equity-breakdown-table {
-  background-color: #378BCC;
-}
-
-.equity-breakdown-table .table-row
-.equity-breakdown-table .table-cell, {
-  border-color: #236AA1;
-}
-
 .equity-breakdown-panel .form-section-header {
   margin-top: 90px;
 }
 
+.equity-breakdown-table {
+  background-color: #4BA2E6;
+  border: 1px solid #236AA1;
+  color: #fff;
+}
+
+.equity-breakdown-table .table-row,
+.equity-breakdown-table .table-cell {
+  border-color: #236AA1;
+}
+
+.equity-breakdown-table .table-footer {
+  background-color: #378BCC;
+}
 
 
 /* Bootstrap Intro
