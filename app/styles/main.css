@@ -404,6 +404,21 @@ fieldset[disabled] .btn:hover {
 /* Input Panel
 ---------------------------------------- */
 
+.popover {
+  color: #333;
+  font-size: 14px;
+}
+.popover a,
+.popover a:visited {
+  color: #378BCC;
+}
+.popover .btn { font-size: 14px; }
+
+
+
+/* Input Panel
+---------------------------------------- */
+
 .input-panel {
   position: absolute;
   top: 0;
@@ -468,15 +483,6 @@ fieldset[disabled] .btn:hover {
 .intro-popover {
   width: 450px;
   max-width: 450px;
-  color: #333;
-  font-size: 14px;
-}
-.intro-popover a,
-.intro-popover a:visited {
-  color: #378BCC;
-}
-.intro-popover .btn {
-  font-size: 14px;
 }
 
 
