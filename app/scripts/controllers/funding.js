@@ -17,7 +17,7 @@ angular.module('fundingApp')
           content: 'This interactive tutorial walks through a hypothetical company. When first starting a company, you need to decide how to split up equity amongst your co-foudners. There\'s a lot of <a href="https://www.google.com/webhp?q=how+to+split+equity">opinions</a> on how to do this, but I think it\'s best if all founders have the same amount of stock. The work put in by everyone in the years to come will trump any work that has already been done by the company. The important thing about founder stock is that there\'s <a href="">vesting</a> in place to protect everyone. Equity % is a calculation of the total number of shares a founder has divided by the total outstanding shares in the company. Let\'s assume there are 1,000,000 outstanding shares. Grace, Merideth, Danielle, and Elon would each have 250,000 shares a piece (250,000/1,000,000 = 25%).',
           element: '#foundersTutorial',
           onNext: function() {
-            $scope.setupInvestorsTutorial();
+            $scope.setupStep1();
             $rootScope.$broadcast('TutorialUpdate');
           }
         },
@@ -25,11 +25,11 @@ angular.module('fundingApp')
             content: 'This is a list of all your investors. There are different <a href="https://www.rocketlawyer.com/article/types-of-investors-for-startups.rl">types</a> of investors. We\'ll be adding angels (high net worth individuals that invest their own personal funds) and VCs (funds that invest other people\'s money on their behalf).',
           element: '#investorsTutorial',
           onNext: function() {
-            $scope.setupConvertibleNotesTutorial();
+            $scope.setupStep2();
             $rootScope.$broadcast('TutorialUpdate');
           },
           onPrev: function() {
-            $scope.setupFoundersTutorial();
+            $scope.setupStep0();
             $rootScope.$broadcast('TutorialUpdate');
           }
         },
@@ -38,11 +38,11 @@ angular.module('fundingApp')
           placement: 'bottom',
           element: '#convertibleNotesTutorial',
           onNext: function() {
-            $scope.setupEquityTutorial();
+            $scope.setupStep3();
             $rootScope.$broadcast('TutorialUpdate');
           },
           onPrev: function() {
-            $scope.setupInvestorsTutorial();
+            $scope.setupStep1();
             $rootScope.$broadcast('TutorialUpdate');
           }
         },
@@ -51,22 +51,22 @@ angular.module('fundingApp')
           placement: 'top',
           element: '#equityTutorial',
           onNext: function() {
-            $scope.setupFinalEquityTutorial();
+            $scope.setupStep4();
             $rootScope.$broadcast('TutorialUpdate');
           },
           onPrev: function() {
-            $scope.setupConvertibleNotesTutorial();
+            $scope.setupStep2();
             $rootScope.$broadcast('TutorialUpdate');
           }
         },
         {
           placement: 'left',
-          content: 'This is about the founders',
-          element: '#finalEquityTutorial',
+          content: 'We\'ve added back the CNs. As said earlier, CNs are converted during the equity round. The determining factor for the amount of equiyt the investor will get is the pre-mone valuation. TODO',
+          element: '#convertibleNotesTutorial',
           onNext: function() {
           },
           onPrev: function() {
-            $scope.setupEquityTutorial();
+            $scope.setupStep3();
             $rootScope.$broadcast('TutorialUpdate');
           }
         }
@@ -74,7 +74,7 @@ angular.module('fundingApp')
     });
     $scope.tutorial.init();
 
-    $scope.setupFoundersTutorial = function() {
+    $scope.setupStep0 = function() {
       //redundant, but if we hit "Back" in the tutorial we need to reset the state
       startupService.startup.removeFounders();
       startupService.startup.removeConvertibleNotes();
@@ -90,7 +90,7 @@ angular.module('fundingApp')
       startupService.updateCapTable();
     };
 
-    $scope.setupInvestorsTutorial = function() {
+    $scope.setupStep1 = function() {
       //clean up startup
       startupService.startup.removeConvertibleNotes();
       startupService.startup.removeEquityRounds();
@@ -105,7 +105,7 @@ angular.module('fundingApp')
       startupService.updateCapTable(); //this is garbage
     };
 
-    $scope.setupConvertibleNotesTutorial = function() {
+    $scope.setupStep2 = function() {
       //clean up startup
       startupService.startup.removeConvertibleNotes();
       startupService.startup.removeEquityRounds();
@@ -118,7 +118,8 @@ angular.module('fundingApp')
       startupService.updateCapTable();
     };
 
-    $scope.setupEquityTutorial = function() {
+    $scope.setupStep3 = function() {
+      startupService.startup.removeConvertibleNotes();
       startupService.startup.removeEquityRounds();
       var equityRound = new EquityRound(4000000);
       equityRound.addInvestor(startupService.investors[4], 1000000);
@@ -126,7 +127,20 @@ angular.module('fundingApp')
       startupService.updateCapTable();
     };
 
-    $scope.setupFinalEquityTutorial = function() {
+    $scope.setupStep4 = function() {
+      //clean up startup
+      startupService.startup.removeConvertibleNotes();
+      startupService.startup.removeEquityRounds();
+      var cn = new ConvertibleNote(4000000, 20);
+      cn.addInvestor(startupService.investors[0], 50000);
+      cn.addInvestor(startupService.investors[1], 75000);
+      cn.addInvestor(startupService.investors[2], 100000);
+      cn.addInvestor(startupService.investors[3], 200000);
+      var equityRound = new EquityRound(4000000);
+      equityRound.addInvestor(startupService.investors[4], 1000000);
+      startupService.startup.addEquityRound(equityRound);
+      startupService.startup.addConvertibleNote(cn);
+      startupService.updateCapTable();
     };
 
     $scope.startTutorial = function() {
@@ -139,7 +153,7 @@ angular.module('fundingApp')
         startupService.investors.splice(0,1);
       }
       startupService.updateCapTable(); //this is garbage
-      $scope.setupFoundersTutorial();
+      $scope.setupStep0();
       $scope.tutorial.start(true).goTo(0);
     };
   }]);
