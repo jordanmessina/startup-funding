@@ -10,8 +10,12 @@
 
 <div class="table table-bordered" ng-show="founders.length">
   <div class="table-row" ng-repeat="founder in founders">
-    <div class="table-cell table-cell-large">{{founder.name}}</div>
-    <div class="table-cell table-cell-small">{{founder.equity}}</div>
+    <div class="table-cell table-cell-large">
+      <input class="ghost-control ghost-control-full" type="text" ng-model="founder.name" value="{{founder.name}}">
+    </div><!-- .table-cell -->
+    <div class="table-cell table-cell-small">
+      <input class="ghost-control ghost-control-full" type="text" ng-model="founder.equity" value="{{founder.equity}}">
+    </div><!-- .table-cell -->
     <button type="button" class="table-row-delete" ng-click="removeFounder($index)"><span aria-hidden="true">×</span></button>
   </div><!-- .table-row -->
   <div class="table-footer">
