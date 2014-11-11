@@ -41,7 +41,7 @@ p { margin-bottom: 26px; }
   font-size: 24px;
   color: #FEE82A;
 }
-.app-title a { display: block; }
+.app-title a { display: inline-block; }
 .app-title a:hover { text-decoration: none; }
 .app-title img {
   height: 27px;
@@ -466,8 +466,8 @@ fieldset[disabled] .btn:hover {
 ---------------------------------------- */
 
 .intro-popover {
-  width: 500px;
-  max-width: 500px;
+  width: 450px;
+  max-width: 450px;
   color: #333;
   font-size: 14px;
 }
