@@ -61,7 +61,7 @@ angular.module('fundingApp')
         },
         {
           placement: 'left',
-          content: 'We\'ve added back the CNs. As said earlier, CNs are converted during the equity round. The determining factor for the amount of equiyt the investor will get is the pre-mone valuation. TODO',
+          content: 'We\'ve added back the CNs. As said earlier, CNs are converted during the equity round using the pre-money valuation, and the  ey use pretty much the same formula as equity rounds, but you use the <strong>pre-money valuation</strong> to determine what notes convert to. For CNs, you use either the Valuation Cap OR the Discount Rate to determine how much equity a CN converts to, but <strong>NOT</strong> both. You choose whichever one yields the larger return. Let\'s see what the formula looks like for a valuation cap of $4,000,000 and $200,000 invested. In this case because our Valuation Cap and Pre-money valuation are the same. We determined that shares would be $4 per share at the pre-money valuation. $200,000/$4 equals 50,000 shares.',
           element: '#convertibleNotesTutorial',
           onNext: function() {
           },
