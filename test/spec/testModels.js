@@ -122,18 +122,20 @@ describe("An Investor and an investment", function() {
 describe("A Startup", function() {
   it("should be able to add founders, up to 100% equity", function() {
     var startup = new Startup();
-    var founder1 = new Founder('Jordan', 50);
-    var founder2 = new Founder('Jimmy', 25);
-    var founder3 = new Founder('Jane', 35);
-    var founder4 = new Founder('Jannet', 25);
+    var founder1 = new Founder('Jordan', 5000000);
+    var founder2 = new Founder('Jimmy', 2500000);
+    var founder3 = new Founder('Jane', 3500000);
+    var founder4 = new Founder('Jannet', 2500000);
     startup.addFounder(founder1);
-    expect(startup.totalFounderEquity()).toEqual(50);
+    expect(startup.totalIssuedShares()).toEqual(5000000);
+    expect(startup.totalFounderEquity()).toEqual(.5);
     startup.addFounder(founder2);
-    expect(startup.totalFounderEquity()).toEqual(75);
-    startup.addFounder(founder3);
-    expect(startup.totalFounderEquity()).toEqual(75);
+    expect(startup.totalFounderEquity()).toEqual(.75);
+    startup.addFounder(founder3); //too much equity, this guy won't be a founder
+    expect(startup.totalFounderEquity()).toEqual(.75);
     startup.addFounder(founder4);
-    expect(startup.totalFounderEquity()).toEqual(100);
+    expect(startup.totalFounderEquity()).toEqual(1);
+    expect(startup.founders.length).toEqual(3);
   });
 
   it("should be able to add convertible notes and equity rounds (but not duplicates)", function() {
@@ -176,45 +178,31 @@ describe("A Startup", function() {
 
   it("should be able to determine equity after rounds of funding", function() {
     var startup = new Startup();
-    var founder1 = new Founder('Jomessin', 25);
-    var founder2 = new Founder('Tommy', 25);
-    var founder3 = new Founder('Janice', 25);
-    var founder4 = new Founder('Lindsey', 25);
+    var founder1 = new Founder('Jomessin', 5000000); // .5 of the total equity
+    var founder2 = new Founder('Tommy', 2500000); // .25 of the total equity
+    var founder3 = new Founder('Janice', 1500000); // .15 of the total equity
+    var founder4 = new Founder('Lindsey', 1000000); // .1 of the total equity
+    var investor1 = new Investor('Sama');
+    var investor2 = new Investor('PG');
+    var investor3 = new Investor('PaulToo');
+    var investor4 = new Investor('a16z');
     startup.addFounder(founder1);
     startup.addFounder(founder2);
     startup.addFounder(founder3);
     startup.addFounder(founder4);
-    var investor1 = new Investor('JCal');
-    var investor2 = new Investor('JTriest');
-    var investor3 = new Investor('BrettD');
-    var investor4 = new Investor('Timmy F');
-    var investor5 = new Investor('Bobby Graz');
-    var investor6 = new Investor('Sean Ammir');
-    var convertibleNote1 = new ConvertibleNote(4000000, 20);
-    var convertibleNote2 = new ConvertibleNote(10000000, 10);
-    var equityRound = new EquityRound(15000000);
-    startup.addConvertibleNote(convertibleNote1);
-    startup.addConvertibleNote(convertibleNote2);
-    startup.addEquityRound(equityRound);
-    convertibleNote1.addInvestor(investor1, 500000);
-    convertibleNote1.addInvestor(investor2, 500000);
-    convertibleNote2.addInvestor(investor1, 250000);
-    convertibleNote2.addInvestor(investor2, 250000);
-    convertibleNote2.addInvestor(investor3, 250000);
-    convertibleNote2.addInvestor(investor4, 250000)
+    var convertibleNote = new ConvertibleNote(5000000, 20);
+    startup.addConvertibleNote(convertibleNote);
+    convertibleNote.addInvestor(investor1, 100000);
+    convertibleNote.addInvestor(investor2, 300000);
+    convertibleNote.addInvestor(investor3, 25000);
     var capTable = startup.capTable();
-    expect(capTable.length).toEqual(8);
-    expect(capTable[0].equity).toEqual(25);
-    expect(capTable[1].equity).toEqual(25);
-    expect(capTable[2].equity).toEqual(25);
-    expect(capTable[3].equity).toEqual(25);
-    expect(capTable[4].equity).toEqual(0);
-    expect(capTable[5].equity).toEqual(0);
-    expect(capTable[6].equity).toEqual(0);
-    expect(capTable[7].equity).toEqual(0);
-    equityRound.addInvestor(investor5, 5000000);
+    expect(capTable.shareholders.length).toEqual(7);
+    expect(capTable.shareholders[0].shares).toEqual(5000000);
+    expect(capTable.shareholders[6].shares).toEqual(0);
+    var equityRound = new EquityRound(10000000);
+    startup.addEquityRound(equityRound);
+    equityRound.addInvestor(investor4, 1000000);
     capTable = startup.capTable();
-    expect(capTable.length).toEqual(9);
-    expect(capTable[0].equity).toEqual(25);
+    console.log(capTable);
   });
 });

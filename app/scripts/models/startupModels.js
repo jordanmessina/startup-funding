@@ -167,6 +167,7 @@ Startup.prototype.totalIssuedShares = function() {
   for (var founderIndex = 0; founderIndex < totalFounders; founderIndex++){
     totalIssuedShares += this.founders[founderIndex].shares;
   }
+  return totalIssuedShares;
 }
 
 Startup.prototype.totalFounderEquity = function() {
@@ -272,90 +273,104 @@ Startup.prototype.removeEquityRounds = function() {
 
 Startup.prototype.capTable = function() {
   this.gatherInvestors();
-  var capTable = [];
+  var capTable = {
+    totalShares: 0,
+    shareholders: []
+  }
   // no equity round, convertible notes don't have equity yet.
+  var foundersLength = this.founders.length;
+  for (var founderIndex = 0; founderIndex < foundersLength; founderIndex++) {
+    capTable.shareholders.push({
+      person: this.founders[founderIndex],
+      shares: this.founders[founderIndex].shares
+    });
+    capTable.totalShares += this.founders[founderIndex].shares;
+  }
+
   if (this.equityRounds.length === 0 || (this.equityRounds.length !== 0 && this.equityRounds[0].investments.length === 0)) {
-    var foundersLength = this.founders.length;
-    for (var founderIndex = 0; founderIndex < foundersLength; founderIndex++) {
-      capTable.push({
-        person: this.founders[founderIndex],
-        equity: this.founders[founderIndex].equity 
-      });
-    }
     var investorsLength = this.investors.length;
     for (var investorIndex = 0; investorIndex < investorsLength; investorIndex++) {
-      capTable.push(
+      capTable.shareholders.push(
         {
           person: this.investors[investorIndex],
-          equity: 0
+          shares: 0
         }
       );
     }
-    return sortByKey(capTable, 'equity');
+    capTable.sharehodlers = sortByKey(capTable.shareholders, 'shares');
+    return capTable;
   }
-  ////series A
-  //var preMoneyValuation = this.equityRounds[0].preMoneyValuation;
-  //var totalRaisedForSeriesA = this.equityRounds[0].totalInvestment(); 
-  //var totalEquityGivenUpAtSeriesA = (totalRaisedForSeriesA / (totalRaisedForSeriesA + preMoneyValuation))*100;
-  //var seriesAInvestorsLength = this.equityRounds[0].investments.length;
-  //for (var investmentIndex = 0; investmentIndex < seriesAInvestorsLength; investmentIndex++){
-  //  var investment = this.equityRounds[0].investments[investmentIndex];
-  //  capTable.push({
-  //    person: investment.investor,
-  //    equity: (investment.amount / (totalRaisedForSeriesA + preMoneyValuation))*100
-  //  });
-  //}
 
-  ////convertible Notes
-  //var convertibleNotesLength = this.convertibleNotes.length;
-  //var totalEquityGivenFromNotes = 0;
-  //for (var notesIndex = 0; notesIndex < convertibleNotesLength; notesIndex++){
-  //  var cap = this.convertibleNotes[notesIndex].cap;
-  //  var discount = this.convertibleNotes[notesIndex].discount;
-  //  var noteInvestorsLength = this.convertibleNotes[notesIndex].investments.length;
-  //  for (var investmentIndex = 0; investmentIndex < noteInvestorsLength; investmentIndex++) {
-  //    var investment = this.convertibleNotes[notesIndex].investments[investmentIndex];
-  //    var equity = Math.max(
-  //      (investment.amount / (((100-discount)/100)*preMoneyValuation))*100,
-  //      (investment.amount / Math.min(cap, preMoneyValuation))*100
-  //    );
-  //    //dilution from series A
-  //    equity *= (100 - totalEquityGivenUpAtSeriesA)/100;
-  //    //check if investor is already in the cap table
-  //    var capTableLength = capTable.length;
-  //    var capTableIndexOf = -1;
-  //    for(var capTableIndex = 0; capTableIndex < capTableLength; capTableIndex++) {
-  //      if(capTable[capTableIndex].person === investment.investor) {
-  //        capTableIndexOf = capTableIndex;
-  //      }
-  //    }
-  //    if(capTableIndexOf !== -1) { // already in the cap table, just add the equity
-  //      capTable[capTableIndexOf].equity += equity;
-  //    } else { // not currently in the cap table, create new entry
-  //      capTable.push(
-  //        {
-  //          person: investment.investor,
-  //          equity: equity
-  //        }
-  //      );
-  //    }
-  //    totalEquityGivenFromNotes += equity;
-  //  }
-  //}
+  //pre-money valuation, used to determine everyone's shares
+  var preMoneyValuation = this.equityRounds[0].preMoneyValuation;
 
-  //// founders
-  //var totalEquityGivenFromNotesAndSeriesA = totalEquityGivenUpAtSeriesA + totalEquityGivenFromNotes;
-  //var foundersLength = this.founders.length;
-  //for (var foundersIndex = 0; foundersIndex < foundersLength; foundersIndex++){
-  //  var founder = this.founders[foundersIndex];
-  //  var equity = founder.equity * ((100-totalEquityGivenFromNotesAndSeriesA)/100);
-  //  capTable.push(
-  //    {
-  //      person: founder,
-  //      equity: equity
-  //    }
-  //  );
-  //}
+  //convertible Notes
+  var convertibleNotesLength = this.convertibleNotes.length;
+  for (var notesIndex = 0; notesIndex < convertibleNotesLength; notesIndex++){
+    //protect against divide by 0
+    var cap = this.convertibleNotes[notesIndex].cap === 0 ? preMoneyValuation : this.convertibleNotes[notesIndex].cap;
+    var discount = this.convertibleNotes[notesIndex].discount === 0 ? 1 : this.convertibleNotes[notesIndex].discount / 100;
+
+    var noteInvestorsLength = this.convertibleNotes[notesIndex].investments.length;
+    for (var investmentIndex = 0; investmentIndex < noteInvestorsLength; investmentIndex++) {
+      var investment = this.convertibleNotes[notesIndex].investments[investmentIndex];
+      var shares = Math.max(
+        (investment.amount / ((this.totalShares / preMoneyValuation) * (1 - discount))),
+        (investment.amount / (this.totalShares / Math.min(cap, preMoneyValuation)))
+      );
+      //check if investor is already in the cap table
+      var capTableLength = capTable.shareholders.length;
+      var capTableIndexOf = -1;
+      for(var capTableIndex = 0; capTableIndex < capTableLength; capTableIndex++) {
+        if(capTable.shareholders[capTableIndex].person === investment.investor) {
+          capTableIndexOf = capTableIndex;
+        }
+      }
+      if(capTableIndexOf !== -1) { // already in the cap table, just add the equity
+        capTable.shareholders[capTableIndexOf].shares += shares;
+        capTable.totalShares += shares;
+      } else { // not currently in the cap table, create new entry
+        capTable.shareholders.push(
+          {
+            person: investment.investor,
+            shares: shares
+          }
+        );
+        capTable.totalShares += shares;
+      }
+    }
+  }
+
+
+  //series A
+  var totalRaisedForSeriesA = this.equityRounds[0].totalInvestment(); 
+  var totalEquityGivenUpAtSeriesA = (totalRaisedForSeriesA / (totalRaisedForSeriesA + preMoneyValuation))*100;
+  var seriesAInvestorsLength = this.equityRounds[0].investments.length;
+  for (var investmentIndex = 0; investmentIndex < seriesAInvestorsLength; investmentIndex++){
+    var investment = this.equityRounds[0].investments[investmentIndex];
+    var shares = (investment.amount / ((this.totalShares / preMoneyValuation)));
+    //check if investor is already in the cap table
+    var capTableLength = capTable.shareholders.length;
+    var capTableIndexOf = -1;
+    for(var capTableIndex = 0; capTableIndex < capTableLength; capTableIndex++) {
+      if(capTable.shareholders[capTableIndex].person === investment.investor) {
+        capTableIndexOf = capTableIndex;
+      }
+    }
+    if(capTableIndexOf !== -1) { // already in the cap table, just add the equity
+      capTable.shareholders[capTableIndexOf].shares += shares;
+      capTable.totalShares += shares;
+    } else { // not currently in the cap table, create new entry
+      capTable.shareholders.push(
+        {
+          person: investment.investor,
+          shares: shares
+        }
+      );
+      capTable.totalShares += shares;
+    }
+  }
+
 
   ////any other equity rounds
   //var totalEquityRoundsAfterSeriesA = this.equityRounds.length - 1;
@@ -394,5 +409,6 @@ Startup.prototype.capTable = function() {
   //  }
   //}
 
-  return sortByKey(capTable, 'shares');
+  capTable.shareholders = sortByKey(capTable.shareholders, 'shares');
+  return capTable;
 };
