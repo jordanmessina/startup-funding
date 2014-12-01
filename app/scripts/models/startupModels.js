@@ -310,7 +310,7 @@ Startup.prototype.capTable = function() {
   for (var notesIndex = 0; notesIndex < convertibleNotesLength; notesIndex++){
     //protect against divide by 0
     var cap = this.convertibleNotes[notesIndex].cap === 0 ? preMoneyValuation : this.convertibleNotes[notesIndex].cap;
-    var discount = this.convertibleNotes[notesIndex].discount === 0 ? 1 : this.convertibleNotes[notesIndex].discount / 100;
+    var discount = this.convertibleNotes[notesIndex].discount === 0 ? 0 : this.convertibleNotes[notesIndex].discount / 100;
 
     var noteInvestorsLength = this.convertibleNotes[notesIndex].investments.length;
     for (var investmentIndex = 0; investmentIndex < noteInvestorsLength; investmentIndex++) {
