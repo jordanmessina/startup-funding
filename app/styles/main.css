@@ -41,6 +41,8 @@ p { margin-bottom: 26px; }
   font-size: 24px;
   color: #FEE82A;
 }
+.app-title a { display: inline-block; }
+.app-title a:hover { text-decoration: none; }
 .app-title img {
   height: 27px;
   vertical-align: text-top;
@@ -402,6 +404,21 @@ fieldset[disabled] .btn:hover {
 /* Input Panel
 ---------------------------------------- */
 
+.popover {
+  color: #333;
+  font-size: 14px;
+}
+.popover a,
+.popover a:visited {
+  color: #378BCC;
+}
+.popover .btn { font-size: 14px; }
+
+
+
+/* Input Panel
+---------------------------------------- */
+
 .input-panel {
   position: absolute;
   top: 0;
@@ -464,17 +481,8 @@ fieldset[disabled] .btn:hover {
 ---------------------------------------- */
 
 .intro-popover {
-  width: 500px;
-  max-width: 500px;
-  color: #333;
-  font-size: 14px;
-}
-.intro-popover a,
-.intro-popover a:visited {
-  color: #378BCC;
-}
-.intro-popover .btn {
-  font-size: 14px;
+  width: 450px;
+  max-width: 450px;
 }
 
 
