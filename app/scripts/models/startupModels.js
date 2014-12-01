@@ -162,12 +162,12 @@ function Startup() {
 }
 
 Startup.prototype.totalIssuedShares = function() {
-  var totalIssuedShares = 0;
+  var totalShares = 0;
   var totalFounders = this.founders.length;
   for (var founderIndex = 0; founderIndex < totalFounders; founderIndex++){
-    totalIssuedShares += this.founders[founderIndex].shares;
+    totalShares += this.founders[founderIndex].shares;
   }
-  return totalIssuedShares;
+  return totalShares;
 }
 
 Startup.prototype.totalFounderEquity = function() {
@@ -274,7 +274,8 @@ Startup.prototype.removeEquityRounds = function() {
 Startup.prototype.capTable = function() {
   this.gatherInvestors();
   var capTable = {
-    totalShares: 0,
+    totalShares: this.totalShares,
+    totalIssuedShares: 0,
     shareholders: []
   }
   // no equity round, convertible notes don't have equity yet.
@@ -284,7 +285,7 @@ Startup.prototype.capTable = function() {
       person: this.founders[founderIndex],
       shares: this.founders[founderIndex].shares
     });
-    capTable.totalShares += this.founders[founderIndex].shares;
+    capTable.totalIssuedShares += this.founders[founderIndex].shares;
   }
 
   if (this.equityRounds.length === 0 || (this.equityRounds.length !== 0 && this.equityRounds[0].investments.length === 0)) {
@@ -315,8 +316,8 @@ Startup.prototype.capTable = function() {
     for (var investmentIndex = 0; investmentIndex < noteInvestorsLength; investmentIndex++) {
       var investment = this.convertibleNotes[notesIndex].investments[investmentIndex];
       var shares = Math.max(
-        (investment.amount / ((this.totalShares / preMoneyValuation) * (1 - discount))),
-        (investment.amount / (this.totalShares / Math.min(cap, preMoneyValuation)))
+        (investment.amount / ((preMoneyValuation / this.totalShares) * (1 - discount))),
+        (investment.amount / (Math.min(cap, preMoneyValuation) / this.totalShares))
       );
       //check if investor is already in the cap table
       var capTableLength = capTable.shareholders.length;
@@ -337,6 +338,7 @@ Startup.prototype.capTable = function() {
           }
         );
         capTable.totalShares += shares;
+        capTable.totalIssuedShares += shares;
       }
     }
   }
@@ -348,7 +350,7 @@ Startup.prototype.capTable = function() {
   var seriesAInvestorsLength = this.equityRounds[0].investments.length;
   for (var investmentIndex = 0; investmentIndex < seriesAInvestorsLength; investmentIndex++){
     var investment = this.equityRounds[0].investments[investmentIndex];
-    var shares = (investment.amount / ((this.totalShares / preMoneyValuation)));
+    var shares = (investment.amount / ((preMoneyValuation / this.totalShares)));
     //check if investor is already in the cap table
     var capTableLength = capTable.shareholders.length;
     var capTableIndexOf = -1;
@@ -368,6 +370,7 @@ Startup.prototype.capTable = function() {
         }
       );
       capTable.totalShares += shares;
+      capTable.totalIssuedShares += shares;
     }
   }
 

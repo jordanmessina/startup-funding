@@ -203,6 +203,6 @@ describe("A Startup", function() {
     startup.addEquityRound(equityRound);
     equityRound.addInvestor(investor4, 1000000);
     capTable = startup.capTable();
-    console.log(capTable);
+    //TODO cap table tests
   });
 });

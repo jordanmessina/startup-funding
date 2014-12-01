@@ -4,12 +4,12 @@
 
 
 <div class="table equity-breakdown-table" ng-show="founders.length">
-  <div class="table-row" ng-repeat="entity in startupService.capTable">
+  <div class="table-row" ng-repeat="shareholder in startupService.capTable.shareholders">
     <div class="table-cell table-cell-large">
-      {{entity.person.name}}
+      {{shareholder.person.name}}
     </div><!-- .table-cell -->
     <div class="table-cell table-cell-small">
-      {{ entity.equity | number:2 }}%
+      {{ (shareholder.shares / startupService.capTable.totalShares) * 100  | number:2 }}%
     </div><!-- .table-cell -->
   </div><!-- .table-row -->
 
@@ -18,7 +18,7 @@
       TOTAL
     </div><!-- .table-cell -->
     <div class="table-cell table-cell-small">
-      100%
+        {{ (startupService.capTable.totalIssuedShares / startupService.capTable.totalShares) * 100 | number:2 }}%
     </div><!-- .table-cell -->
   </div><!-- .table-footer -->
 </div><!-- .table -->

@@ -161,9 +161,12 @@ angular.module('fundingApp')
 angular.module('fundingApp')
   .controller('FoundersCtrl', ['$scope', '$rootScope', '$log', 'startupService', function ($scope, $rootScope, $log, startupService) {
     $scope.founders = startupService.startup.founders;
+    $scope.startup = startupService.startup;
 
     $scope.addFounder = function () {
-      startupService.startup.addFounder($scope.newFounder);
+      var name = $scope.newFounder.name;
+      var shares = ($scope.newFounder.equity/100) * startupService.startup.totalShares;
+      startupService.startup.addFounder(new Founder(name, shares));
       $scope.newFounder = {};
       startupService.updateCapTable();
     };
@@ -173,7 +176,9 @@ angular.module('fundingApp')
       startupService.updateCapTable(); //this is garbage
     };
 
-    $scope.totalFounderEquity = startupService.startup.totalFounderEquity;
+    $scope.totalFounderEquity = function() {
+      return startupService.startup.totalFounderEquity();
+    }
 
     $rootScope.$on('TutorialUpdate', function() {
       $scope.$apply();
