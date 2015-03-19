@@ -1,0 +1,26 @@
+<div class="final-equity">
+  <h4 class="form-section-header">Equity Breakdown
+    <small><a href="#" data-toggle="modal" data-target="#finalEquity"><span class="glyphicon glyphicon-new-window"></span></a></small>
+  </h4>
+
+
+  <div class="table equity-breakdown-table" ng-show="founders.length">
+    <div class="table-row" ng-repeat="shareholder in startupService.capTable.shareholders">
+      <div class="table-cell table-cell-large">
+        {{shareholder.person.name}}
+      </div><!-- .table-cell -->
+      <div class="table-cell table-cell-small">
+        {{ (shareholder.shares / startupService.capTable.totalShares) * 100  | number:2 }}%
+      </div><!-- .table-cell -->
+    </div><!-- .table-row -->
+
+    <div class="table-footer">
+      <div class="table-cell table-cell-large">
+        TOTAL
+      </div><!-- .table-cell -->
+      <div class="table-cell table-cell-small">
+          {{ (startupService.capTable.totalIssuedShares / startupService.capTable.totalShares) * 100 | number:2 }}%
+      </div><!-- .table-cell -->
+    </div><!-- .table-footer -->
+  </div><!-- .table -->
+</div>

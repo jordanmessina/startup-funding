@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Startup Funding</title>
+    <link rel="stylesheet" href="assets/css/vendor.css">
+    <link rel="stylesheet" href="assets/css/application.css">
+  </head>
+  <body ng-app="fundingApp">
+
+    <bootstrap-container>
+      <bootstrap-row>
+        <bootstrap-column sm="12" md="8" class="input-panel" >
+          <h1 class="app-title">
+            <a data-toggle="collapse" href="#intro" aria-expanded="true" aria-controls="intro" id="gotIt">
+              <img src="images/coin.png">
+              Startup Funding
+            </a>
+            <div class="addthis_sharing_toolbox"></div>
+          </h1>
+          <!-- Go to www.addthis.com/dashboard to customize your tools -->
+          <bootstrap-row class="panel-collapse collapse in" id="intro" role="intro" aria-labelledby="intro" ng-intro-options="TutorialOptions" ng-controller="TutorialCtrl">
+            <bootstrap-column sm="6">
+              <p>This is a simple tool that demonstrates the mechanics of Convertible Notes and Equity Rounds, and shows how they affect each other.</p>
+              <p>If you're here to learn about Convertible Notes and Equity Rounds, a great first step is using the <a href="#" ng-click="startTutorial()">interactive tutorial.</a>
+              <p>Admittedly, funding is more complicated than this, but this is a great way to understand the basics. <a data-toggle="collapse" href="#intro" aria-expanded="true" aria-controls="intro" id="gotIt">Got It.</a></p>
+            </bootstrap-column>
+          </bootstrap-row>
+
+          <bootstrap-row>
+            <bootstrap-column sm="6">
+              <div class="form-section" startup-founders ng-controller="FoundersCtrl" id="foundersTutorial"></div>
+              <div class="form-section" startup-investors ng-controller="InvestorsCtrl" id="investorsTutorial"></div>
+            </bootstrap-column>
+
+            <bootstrap-column sm="6">
+              <div class="form-section" convertible-notes ng-controller="ConvertibleNotesCtrl" id="convertibleNotesTutorial"></div>
+              <div class="form-section" equity-rounds ng-controller="EquityRoundsCtrl" id="equityTutorial"></div>
+            </bootstrap-column>
+          </bootstrap-row>
+        </bootstrap-column>
+
+        <bootstrap-column sm="12" md="4" class="equity-breakdown-panel">
+          <sf-final-equity></sf-final-equity>
+        </bootstrap-column>
+      </bootstrap-row>
+    </bootstrap-container>
+
+    <a href="https://github.com/jordanmessina/startup-funding"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+
+    <script src="assets/js/vendor.js"></script>
+    <script src="assets/js/application.js"></script>
+
+  </body>
+</html>

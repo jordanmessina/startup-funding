@@ -1,0 +1,25 @@
+{
+  "name": "startup-funding",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jordanmessina/startup-funding.git"
+  },
+  "author": "people",
+  "license": "WTFPL",
+  "bugs": {
+    "url": "https://github.com/jordanmessina/startup-funding/issues"
+  },
+  "homepage": "https://github.com/jordanmessina/startup-funding",
+  "devDependencies": {
+    "gulp": "^3.8.11",
+    "gulp-angular-templates": "0.0.1",
+    "gulp-concat": "^2.5.2",
+    "gulp-connect": "^2.2.0"
+  }
+}
