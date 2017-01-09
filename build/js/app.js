@@ -53,6 +53,16 @@
 	var EquityBreakdown = __webpack_require__(182);
 
 	class StartupFunding extends React.Component {
+	  constructor(props) {
+	    super(props);
+	    this.state = {
+	      founder: [],
+	      investors: [],
+	      convertibleNotes: [],
+	      equityRounds: []
+	    };
+	  }
+
 	  render() {
 	    var founders = [{
 	      id: 1,
@@ -77,6 +87,9 @@
 	    }, {
 	      id: 3,
 	      name: "Jason Calacanis"
+	    }, {
+	      id: 4,
+	      name: "Andressen Horowitz"
 	    }];
 
 	    var convertibleNotes = [{
@@ -89,6 +102,15 @@
 	      }, {
 	        id: 3,
 	        amount: 150000
+	      }]
+	    }];
+
+	    var equityRounds = [{
+	      id: 1,
+	      preMoney: 20000000,
+	      investors: [{
+	        id: 4,
+	        amount: 5000000
 	      }]
 	    }];
 
@@ -159,7 +181,7 @@
 	              'div',
 	              { className: 'col-sm-6' },
 	              React.createElement(ConvertibleNotes, { convertibleNotes: convertibleNotes, investors: investors }),
-	              React.createElement(EquityRound, null)
+	              React.createElement(EquityRound, { equityRounds: equityRounds, investors: investors })
 	            )
 	          )
 	        ),
@@ -21913,6 +21935,122 @@
 
 	class EquityRound extends React.Component {
 	  render() {
+	    var props = this.props;
+	    var equityRoundsJSX = props.equityRounds.map(function (equityRound) {
+
+	      var investorDropdownJSX = props.investors.map(function (investor) {
+	        return React.createElement(
+	          "option",
+	          { value: investor.id, className: "" },
+	          investor.name
+	        );
+	      });
+	      var investmentJSX = equityRound.investors.map(function (investorInvestment) {
+	        var investorName = props.investors.filter(function (investor) {
+	          return investorInvestment.id == investor.id;
+	        })[0].name;
+	        return React.createElement(
+	          "div",
+	          { className: "table-row" },
+	          React.createElement(
+	            "div",
+	            { className: "table-cell table-cell-large" },
+	            investorName
+	          ),
+	          React.createElement(
+	            "div",
+	            { className: "table-cell table-cell-small" },
+	            React.createElement("input", { className: "ghost-control ghost-control-full", type: "text", value: investorInvestment.amount })
+	          ),
+	          React.createElement(
+	            "button",
+	            { type: "button", className: "table-row-delete" },
+	            React.createElement(
+	              "span",
+	              { "aria-hidden": "true" },
+	              "\xD7"
+	            )
+	          )
+	        );
+	      });
+
+	      var postMoneyValuation = equityRound.preMoney;
+	      for (var i = 0; i < equityRound.investors.length; i++) {
+	        postMoneyValuation += equityRound.investors[i].amount;
+	      }
+
+	      return React.createElement(
+	        "div",
+	        { className: "table" },
+	        React.createElement(
+	          "div",
+	          { className: "table-header" },
+	          React.createElement(
+	            "div",
+	            { className: "table-cell" },
+	            "$",
+	            equityRound.preMoney,
+	            " Pre-Money ",
+	            React.createElement(
+	              "span",
+	              { className: "hidden-xs" },
+	              "Valuation"
+	            )
+	          ),
+	          React.createElement(
+	            "button",
+	            { type: "button", className: "table-row-delete" },
+	            React.createElement(
+	              "span",
+	              { "aria-hidden": "true" },
+	              "\xD7"
+	            )
+	          )
+	        ),
+	        React.createElement(
+	          "div",
+	          { className: "table-row" },
+	          React.createElement(
+	            "div",
+	            { className: "table-cell table-cell-control" },
+	            React.createElement(
+	              "form",
+	              { className: "form-inline", name: "addInvestorToEquityRoundForm" },
+	              React.createElement(
+	                "select",
+	                { className: "form-control form-control-large", required: "" },
+	                React.createElement(
+	                  "option",
+	                  { value: "", disabled: "" },
+	                  "Investor"
+	                ),
+	                investorDropdownJSX
+	              ),
+	              React.createElement("input", { className: "form-control form-control-small", type: "number", placeholder: "Amount", min: "0", required: "" }),
+	              React.createElement("input", { type: "submit", className: "btn btn-primary", value: "Add" })
+	            )
+	          )
+	        ),
+	        investmentJSX,
+	        React.createElement(
+	          "div",
+	          { className: "table-footer" },
+	          React.createElement(
+	            "div",
+	            { className: "table-cell" },
+	            "$",
+	            postMoneyValuation,
+	            " Post-Money ",
+	            React.createElement(
+	              "span",
+	              { className: "hidden-xs" },
+	              "Valuation"
+	            )
+	          )
+	        )
+	      );
+	    });
+
 	    return React.createElement(
 	      "div",
 	      null,
@@ -21939,108 +22077,7 @@
 	          React.createElement("input", { className: "form-control form-control-single", type: "number", placeholder: "Pre-Money Valuation", required: "" }),
 	          React.createElement("input", { className: "btn btn-primary", type: "submit", value: "Add" })
 	        ),
-	        React.createElement(
-	          "div",
-	          { className: "table" },
-	          React.createElement(
-	            "div",
-	            { className: "table-header" },
-	            React.createElement(
-	              "div",
-	              { className: "table-cell" },
-	              "$20,000,000.00 Pre-Money ",
-	              React.createElement(
-	                "span",
-	                { className: "hidden-xs" },
-	                "Valuation"
-	              )
-	            ),
-	            React.createElement(
-	              "button",
-	              { type: "button", className: "table-row-delete" },
-	              React.createElement(
-	                "span",
-	                { "aria-hidden": "true" },
-	                "\xD7"
-	              )
-	            )
-	          ),
-	          React.createElement(
-	            "div",
-	            { className: "table-row" },
-	            React.createElement(
-	              "div",
-	              { className: "table-cell table-cell-control" },
-	              React.createElement(
-	                "form",
-	                { className: "form-inline", name: "addInvestorToEquityRoundForm" },
-	                React.createElement(
-	                  "select",
-	                  { className: "form-control form-control-large", required: "" },
-	                  React.createElement(
-	                    "option",
-	                    { value: "", disabled: "" },
-	                    "Investor"
-	                  ),
-	                  React.createElement(
-	                    "option",
-	                    { value: "0", className: "" },
-	                    "Ludlow Ventures"
-	                  ),
-	                  React.createElement(
-	                    "option",
-	                    { value: "1", className: "" },
-	                    "WeBad Ventures"
-	                  ),
-	                  React.createElement(
-	                    "option",
-	                    { value: "2", className: "" },
-	                    "Jason Calacanis"
-	                  )
-	                ),
-	                React.createElement("input", { className: "form-control form-control-small", type: "number", placeholder: "Amount", min: "0", required: "" }),
-	                React.createElement("input", { type: "submit", className: "btn btn-primary", value: "Add" })
-	              )
-	            )
-	          ),
-	          React.createElement(
-	            "div",
-	            { className: "table-row" },
-	            React.createElement(
-	              "div",
-	              { className: "table-cell table-cell-large" },
-	              "Jason Calacanis"
-	            ),
-	            React.createElement(
-	              "div",
-	              { className: "table-cell table-cell-small" },
-	              React.createElement("input", { className: "ghost-control ghost-control-full", type: "text", value: "5000000" })
-	            ),
-	            React.createElement(
-	              "button",
-	              { type: "button", className: "table-row-delete" },
-	              React.createElement(
-	                "span",
-	                { "aria-hidden": "true" },
-	                "\xD7"
-	              )
-	            )
-	          ),
-	          React.createElement(
-	            "div",
-	            { className: "table-footer" },
-	            React.createElement(
-	              "div",
-	              { className: "table-cell" },
-	              "$25,000,000.00 Post-Money ",
-	              React.createElement(
-	                "span",
-	                { className: "hidden-xs" },
-	                "Valuation"
-	              )
-	            )
-	          )
-	        )
+	        equityRoundsJSX
 	      )
 	    );
 	  }

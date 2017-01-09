@@ -7,6 +7,16 @@ var EquityRound = require('./equityRound');
 var EquityBreakdown = require('./equityBreakdown');
 
 class StartupFunding extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      founder: [],
+      investors: [],
+      convertibleNotes: [],
+      equityRounds: []
+    }
+  }
+
   render() {
     var founders = [
       {
@@ -98,7 +108,7 @@ class StartupFunding extends React.Component {
               </div>
               <div className="col-sm-6">
                 <ConvertibleNotes convertibleNotes={convertibleNotes} investors={investors}/>
-                <EquityRound />
+                <EquityRound equityRounds={equityRounds} investors={investors}/>
               </div>
             </div>
           </div>

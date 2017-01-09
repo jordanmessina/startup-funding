@@ -15,7 +15,7 @@ class ConvertibleNotes extends React.Component {
       var investmentJSX = convertibleNote.investors.map( function (investorInvestment) {
         var investorName = props.investors.filter( function (investor) {
           return investorInvestment.id == investor.id;
-        })[0].name
+        })[0].name;
         return (
           <div className="table-row">
             <div className="table-cell table-cell-large">
