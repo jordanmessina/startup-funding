@@ -4,7 +4,7 @@ class Investors extends React.Component {
   render() {
     var investorsJSX = this.props.investors.map( function (investor) {
       return (
-        <div className="table-row">
+        <div key={investor.key} className="table-row">
           <div className="table-cell table-cell-single">
             <input className="ghost-control ghost-control-full" type="text" value={investor.name} />
           </div>

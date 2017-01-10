@@ -1,17 +1,55 @@
 var React = require('react');
 
 class Founders extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      founderName: '',
+      founderEquity: ''
+    }
+    this.handleFounderNameChange = this.handleFounderNameChange.bind(this);
+    this.handleFounderEquityChange = this.handleFounderEquityChange.bind(this);
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
+    this.handleRemoveFounder = this.handleRemoveFounder.bind(this);
+  }
+
+  handleFounderNameChange(event) {
+    this.setState({founderName: event.target.value});
+  }
+
+  handleFounderEquityChange(event) {
+    this.setState({founderEquity: event.target.value});
+  }
+
+  handleFormSubmit(event) {
+    event.preventDefault();
+    this.props.addFounder(this.state.founderName, Number(this.state.founderEquity));
+    this.setState({
+      founderName: '',
+      founderEquity: ''
+    });
+  }
+
+  handleRemoveFounder(event) {
+    event.preventDefault();
+    console.log('in handleRemoveFounder');
+    console.log(event);
+    this.props.removeFounder(Number(event.target.id));
+  }
+
   render() {
-    var founderJSX = this.props.founders.map( function (founder, index) {
+    var component = this;
+    var founderJSX = this.props.founders.map( function (founder) {
+        console.log(founder);
         return (
-          <div className="table-row">
+          <div key={'founder_' + founder.key} className="table-row">
             <div className="table-cell table-cell-large">
               <input className="ghost-control ghost-control-full" type="text" value={founder.name} />
             </div>
             <div className="table-cell table-cell-small">
               <input type="number" className="ghost-control ghost-control-full" value={founder.equity} />
             </div>
-            <button type="button" className="table-row-delete"><span aria-hidden="true">×</span></button>
+            <button id={founder.key} type="button" className="table-row-delete" onClick={component.handleRemoveFounder}><span aria-hidden="true">×</span></button>
           </div>
         );
     });
@@ -27,9 +65,9 @@ class Founders extends React.Component {
           <h4 className="form-section-header">Founders / Common Stock Holders
             <small><a href="#" data-toggle="modal"><span className="glyphicon glyphicon-new-window"></span></a></small>
           </h4>
-          <form className="form-inline" name="founderForm">
-            <input className="form-control form-control-large" type="text" placeholder="Founder Name" required="" />
-            <input className="form-control form-control-small" type="number" placeholder="Equity %" max="99.6" min="0" step="any" required="" />
+          <form className="form-inline" name="founderForm" onSubmit={this.handleFormSubmit}>
+            <input className="form-control form-control-large" type="text" placeholder="Founder Name" required="" value={this.state.founderName} onChange={this.handleFounderNameChange} />
+            <input className="form-control form-control-small" type="number" placeholder="Equity %" max="99.6" min="0" step="any" required="" value={this.state.founderEquity} onChange={this.handleFounderEquityChange} />
             <input className="btn btn-primary" type="submit" value="Add" />
           </form>
           <div className="table table-bordered">

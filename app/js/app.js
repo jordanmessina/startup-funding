@@ -10,64 +10,82 @@ class StartupFunding extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      founder: [],
+      founders: [],
       investors: [],
       convertibleNotes: [],
       equityRounds: []
     }
+    this.addFounder = this.addFounder.bind(this);
+    this.removeFounder = this.removeFounder.bind(this);
+  }
+
+  addFounder(name, equity) {
+    //add first founder
+    if(this.state.founders.length == 0) {
+      this.setState({
+        founders: [{
+          key: 1,
+          name: name,
+          equity: equity
+        }]
+      });
+    } else {
+      // get next id
+      var founderKeys = this.state.founders.map( function (founder) {
+        founder.key
+      });
+      var nextFounderKey = Math.max.apply(null, founderKeys) + 1;
+      var founders = this.state.founders;
+     founders.push({
+       key: nextFounderKey,
+       name: name,
+       equity: equity
+     });
+     this.setState({
+       founders: founders
+     }); 
+    }
+  }
+
+  removeFounder(founderKey) {
+    var founders = this.state.founders.filter( function(founder) {
+        return founderKey != founder.key;
+    });
+    this.setState({ founders: founders });
   }
 
   render() {
-    var founders = [
-      {
-        id: 1,
-        name: "Jordan Messina",
-        equity: 20
-      },
-      {
-        id: 2,
-        name: "Colleen Messina",
-        equity: 20
-      },
-      {
-        id: 3,
-        name: "Emi Messina",
-        equity: 60
-      },
-
-    ];
-
     var investors = [
       {
-        id: 1,
+        key: 1,
         name: "Ludlow Ventures"
       },
       {
-        id: 2,
+        key: 2,
         name: "Upfront Ventures"
       },
       {
-        id: 3,
+        key: 3,
         name: "Jason Calacanis"
       },
       {
-        id: 4,
+        key: 4,
         name: "Andressen Horowitz"
       }
     ];
 
     var convertibleNotes = [
       {
-        id: 1,
+        key: 1,
         cap: 2000000,
         discount: 20,
         investors: [
           {
-            id: 1,
+            key: 1,
             amount: 25000
           },
           {
-            id: 3,
+            key: 3,
             amount: 150000
           }
         ]
@@ -76,11 +94,11 @@ class StartupFunding extends React.Component {
 
     var equityRounds = [
       {
-        id: 1,
+        key: 1,
         preMoney: 20000000,
         investors: [
           {
-            id: 4,
+            key: 4,
             amount: 5000000
           } 
         ]
@@ -103,7 +121,7 @@ class StartupFunding extends React.Component {
             </div>
             <div className="row">
               <div className="col-sm-6">
-                <Founders founders={founders} />
+                <Founders founders={this.state.founders} addFounder={this.addFounder} removeFounder={this.removeFounder} />
                 <Investors investors={investors}/>
               </div>
               <div className="col-sm-6">

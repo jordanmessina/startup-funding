@@ -56,60 +56,83 @@
 	  constructor(props) {
 	    super(props);
 	    this.state = {
-	      founder: [],
+	      founders: [],
 	      investors: [],
 	      convertibleNotes: [],
 	      equityRounds: []
 	    };
+	    this.addFounder = this.addFounder.bind(this);
+	    this.removeFounder = this.removeFounder.bind(this);
+	  }
+
+	  addFounder(name, equity) {
+	    //add first founder
+	    if (this.state.founders.length == 0) {
+	      this.setState({
+	        founders: [{
+	          key: 1,
+	          name: name,
+	          equity: equity
+	        }]
+	      });
+	    } else {
+	      // get next id
+	      var founderKeys = this.state.founders.map(function (founder) {
+	        founder.key;
+	      });
+	      var nextFounderKey = Math.max.apply(null, founderKeys) + 1;
+	      var founders = this.state.founders;
+	      founders.push({
+	        key: nextFounderKey,
+	        name: name,
+	        equity: equity
+	      });
+	      this.setState({
+	        founders: founders
+	      });
+	    }
+	  }
+
+	  removeFounder(founderKey) {
+	    var founders = this.state.founders.filter(function (founder) {
+	      return founderKey != founder.key;
+	    });
+	    this.setState({ founders: founders });
 	  }
 
 	  render() {
-	    var founders = [{
-	      id: 1,
-	      name: "Jordan Messina",
-	      equity: 20
-	    }, {
-	      id: 2,
-	      name: "Colleen Messina",
-	      equity: 20
-	    }, {
-	      id: 3,
-	      name: "Emi Messina",
-	      equity: 60
-	    }];
-
 	    var investors = [{
-	      id: 1,
+	      key: 1,
 	      name: "Ludlow Ventures"
 	    }, {
-	      id: 2,
+	      key: 2,
 	      name: "Upfront Ventures"
 	    }, {
-	      id: 3,
+	      key: 3,
 	      name: "Jason Calacanis"
 	    }, {
-	      id: 4,
+	      key: 4,
 	      name: "Andressen Horowitz"
 	    }];
 
 	    var convertibleNotes = [{
-	      id: 1,
+	      key: 1,
 	      cap: 2000000,
 	      discount: 20,
 	      investors: [{
-	        id: 1,
+	        key: 1,
 	        amount: 25000
 	      }, {
-	        id: 3,
+	        key: 3,
 	        amount: 150000
 	      }]
 	    }];
 
 	    var equityRounds = [{
-	      id: 1,
+	      key: 1,
 	      preMoney: 20000000,
 	      investors: [{
-	        id: 4,
+	        key: 4,
 	        amount: 5000000
 	      }]
 	    }];
@@ -174,7 +197,7 @@
 	            React.createElement(
 	              'div',
 	              { className: 'col-sm-6' },
-	              React.createElement(Founders, { founders: founders }),
+	              React.createElement(Founders, { founders: this.state.founders, addFounder: this.addFounder, removeFounder: this.removeFounder }),
 	              React.createElement(Investors, { investors: investors })
 	            ),
 	            React.createElement(
@@ -21617,28 +21640,66 @@
 	var React = __webpack_require__(1);
 
 	class Founders extends React.Component {
+	  constructor(props) {
+	    super(props);
+	    this.state = {
+	      founderName: '',
+	      founderEquity: ''
+	    };
+	    this.handleFounderNameChange = this.handleFounderNameChange.bind(this);
+	    this.handleFounderEquityChange = this.handleFounderEquityChange.bind(this);
+	    this.handleFormSubmit = this.handleFormSubmit.bind(this);
+	    this.handleRemoveFounder = this.handleRemoveFounder.bind(this);
+	  }
+
+	  handleFounderNameChange(event) {
+	    this.setState({ founderName: event.target.value });
+	  }
+
+	  handleFounderEquityChange(event) {
+	    this.setState({ founderEquity: event.target.value });
+	  }
+
+	  handleFormSubmit(event) {
+	    event.preventDefault();
+	    this.props.addFounder(this.state.founderName, Number(this.state.founderEquity));
+	    this.setState({
+	      founderName: '',
+	      founderEquity: ''
+	    });
+	  }
+
+	  handleRemoveFounder(event) {
+	    event.preventDefault();
+	    console.log('in handleRemoveFounder');
+	    console.log(event);
+	    this.props.removeFounder(Number(event.target.id));
+	  }
+
 	  render() {
-	    var founderJSX = this.props.founders.map(function (founder, index) {
+	    var component = this;
+	    var founderJSX = this.props.founders.map(function (founder) {
+	      console.log(founder);
 	      return React.createElement(
-	        "div",
-	        { className: "table-row" },
+	        'div',
+	        { key: 'founder_' + founder.key, className: 'table-row' },
 	        React.createElement(
-	          "div",
-	          { className: "table-cell table-cell-large" },
-	          React.createElement("input", { className: "ghost-control ghost-control-full", type: "text", value: founder.name })
+	          'div',
+	          { className: 'table-cell table-cell-large' },
+	          React.createElement('input', { className: 'ghost-control ghost-control-full', type: 'text', value: founder.name })
 	        ),
 	        React.createElement(
-	          "div",
-	          { className: "table-cell table-cell-small" },
-	          React.createElement("input", { type: "number", className: "ghost-control ghost-control-full", value: founder.equity })
+	          'div',
+	          { className: 'table-cell table-cell-small' },
+	          React.createElement('input', { type: 'number', className: 'ghost-control ghost-control-full', value: founder.equity })
 	        ),
 	        React.createElement(
-	          "button",
-	          { type: "button", className: "table-row-delete" },
+	          'button',
+	          { id: founder.key, type: 'button', className: 'table-row-delete', onClick: component.handleRemoveFounder },
 	          React.createElement(
-	            "span",
-	            { "aria-hidden": "true" },
-	            "\xD7"
+	            'span',
+	            { 'aria-hidden': 'true' },
+	            '\xD7'
 	          )
 	        )
 	      );
@@ -21650,49 +21711,49 @@
 	    }
 
 	    return React.createElement(
-	      "div",
+	      'div',
 	      null,
 	      React.createElement(
-	        "div",
-	        { className: "form-section", id: "foundersTutorial" },
+	        'div',
+	        { className: 'form-section', id: 'foundersTutorial' },
 	        React.createElement(
-	          "h4",
-	          { className: "form-section-header" },
-	          "Founders / Common Stock Holders",
+	          'h4',
+	          { className: 'form-section-header' },
+	          'Founders / Common Stock Holders',
 	          React.createElement(
-	            "small",
+	            'small',
 	            null,
 	            React.createElement(
-	              "a",
-	              { href: "#", "data-toggle": "modal" },
-	              React.createElement("span", { className: "glyphicon glyphicon-new-window" })
+	              'a',
+	              { href: '#', 'data-toggle': 'modal' },
+	              React.createElement('span', { className: 'glyphicon glyphicon-new-window' })
 	            )
 	          )
 	        ),
 	        React.createElement(
-	          "form",
-	          { className: "form-inline", name: "founderForm" },
-	          React.createElement("input", { className: "form-control form-control-large", type: "text", placeholder: "Founder Name", required: "" }),
-	          React.createElement("input", { className: "form-control form-control-small", type: "number", placeholder: "Equity %", max: "99.6", min: "0", step: "any", required: "" }),
-	          React.createElement("input", { className: "btn btn-primary", type: "submit", value: "Add" })
+	          'form',
+	          { className: 'form-inline', name: 'founderForm', onSubmit: this.handleFormSubmit },
+	          React.createElement('input', { className: 'form-control form-control-large', type: 'text', placeholder: 'Founder Name', required: '', value: this.state.founderName, onChange: this.handleFounderNameChange }),
+	          React.createElement('input', { className: 'form-control form-control-small', type: 'number', placeholder: 'Equity %', max: '99.6', min: '0', step: 'any', required: '', value: this.state.founderEquity, onChange: this.handleFounderEquityChange }),
+	          React.createElement('input', { className: 'btn btn-primary', type: 'submit', value: 'Add' })
 	        ),
 	        React.createElement(
-	          "div",
-	          { className: "table table-bordered" },
+	          'div',
+	          { className: 'table table-bordered' },
 	          founderJSX,
 	          React.createElement(
-	            "div",
-	            { className: "table-footer" },
+	            'div',
+	            { className: 'table-footer' },
 	            React.createElement(
-	              "div",
-	              { className: "table-cell table-cell-large" },
-	              "TOTAL"
+	              'div',
+	              { className: 'table-cell table-cell-large' },
+	              'TOTAL'
 	            ),
 	            React.createElement(
-	              "div",
-	              { className: "table-cell table-cell-small" },
+	              'div',
+	              { className: 'table-cell table-cell-small' },
 	              totalFounderEquity,
-	              "%"
+	              '%'
 	            )
 	          )
 	        )
@@ -21714,7 +21775,7 @@
 	    var investorsJSX = this.props.investors.map(function (investor) {
 	      return React.createElement(
 	        "div",
-	        { className: "table-row" },
+	        { key: investor.key, className: "table-row" },
 	        React.createElement(
 	          "div",
 	          { className: "table-cell table-cell-single" },
@@ -21783,8 +21844,8 @@
 
 	      var investorDropdownJSX = props.investors.map(function (investor) {
 	        return React.createElement(
-	          "option",
-	          { value: investor.id, className: "" },
+	          'option',
+	          { key: 'investorDropdown_' + convertibleNote.key, value: investor.id, className: '' },
 	          investor.name
 	        );
 	      });
@@ -21794,25 +21855,25 @@
 	          return investorInvestment.id == investor.id;
 	        })[0].name;
 	        return React.createElement(
-	          "div",
-	          { className: "table-row" },
+	          'div',
+	          { key: 'investorInvestment_' + investorInvestment.key, className: 'table-row' },
 	          React.createElement(
-	            "div",
-	            { className: "table-cell table-cell-large" },
+	            'div',
+	            { className: 'table-cell table-cell-large' },
 	            investorName
 	          ),
 	          React.createElement(
-	            "div",
-	            { className: "table-cell table-cell-small" },
-	            React.createElement("input", { className: "ghost-control ghost-control-full", type: "text", value: investorInvestment.amount })
+	            'div',
+	            { className: 'table-cell table-cell-small' },
+	            React.createElement('input', { className: 'ghost-control ghost-control-full', type: 'text', value: investorInvestment.amount })
 	          ),
 	          React.createElement(
-	            "button",
-	            { type: "button", className: "table-row-delete" },
+	            'button',
+	            { type: 'button', className: 'table-row-delete' },
 	            React.createElement(
-	              "span",
-	              { "aria-hidden": "true" },
-	              "\xD7"
+	              'span',
+	              { 'aria-hidden': 'true' },
+	              '\xD7'
 	            )
 	          )
 	        );
@@ -21824,100 +21885,100 @@
 	      }
 
 	      return React.createElement(
-	        "div",
-	        { className: "table table-bordered convertable-note" },
+	        'div',
+	        { className: 'table table-bordered convertable-note' },
 	        React.createElement(
-	          "div",
-	          { className: "table-header" },
+	          'div',
+	          { className: 'table-header' },
 	          React.createElement(
-	            "div",
-	            { className: "table-cell table-cell-full" },
-	            "$",
-	            React.createElement("input", { className: "ghost-control cap-control", type: "number", value: convertibleNote.cap, step: "250000" }),
-	            " cap at a ",
-	            React.createElement("input", { className: "ghost-control discount-control", type: "number", value: convertibleNote.discount }),
-	            "% ",
+	            'div',
+	            { className: 'table-cell table-cell-full' },
+	            '$',
+	            React.createElement('input', { className: 'ghost-control cap-control', type: 'number', value: convertibleNote.cap, step: '250000' }),
+	            ' cap at a ',
+	            React.createElement('input', { className: 'ghost-control discount-control', type: 'number', value: convertibleNote.discount }),
+	            '% ',
 	            React.createElement(
-	              "span",
-	              { className: "hidden-xs" },
-	              "discount"
+	              'span',
+	              { className: 'hidden-xs' },
+	              'discount'
 	            )
 	          ),
 	          React.createElement(
-	            "button",
-	            { type: "button", className: "table-row-delete" },
+	            'button',
+	            { type: 'button', className: 'table-row-delete' },
 	            React.createElement(
-	              "span",
-	              { "aria-hidden": "true" },
-	              "\xD7"
+	              'span',
+	              { 'aria-hidden': 'true' },
+	              '\xD7'
 	            )
 	          )
 	        ),
 	        React.createElement(
-	          "div",
-	          { className: "table-row" },
+	          'div',
+	          { className: 'table-row' },
 	          React.createElement(
-	            "div",
-	            { className: "table-cell table-cell-control" },
+	            'div',
+	            { className: 'table-cell table-cell-control' },
 	            React.createElement(
-	              "form",
-	              { className: "form-inline", name: "addInvestorToConvertibleNoteForm" },
+	              'form',
+	              { className: 'form-inline', name: 'addInvestorToConvertibleNoteForm' },
 	              React.createElement(
-	                "select",
-	                { className: "form-control form-control-large", required: "" },
+	                'select',
+	                { className: 'form-control form-control-large', required: '' },
 	                React.createElement(
-	                  "option",
-	                  { value: "", disabled: "", selected: "" },
-	                  "Investor"
+	                  'option',
+	                  { value: '', disabled: '', selected: '' },
+	                  'Investor'
 	                ),
 	                investorDropdownJSX
 	              ),
-	              React.createElement("input", { className: "form-control form-control-small", type: "number", placeholder: "Amount", min: "0", required: "" }),
-	              React.createElement("input", { className: "btn btn-default", type: "submit", value: "Add" })
+	              React.createElement('input', { className: 'form-control form-control-small', type: 'number', placeholder: 'Amount', min: '0', required: '' }),
+	              React.createElement('input', { className: 'btn btn-default', type: 'submit', value: 'Add' })
 	            )
 	          )
 	        ),
 	        investmentJSX,
 	        React.createElement(
-	          "div",
-	          { className: "table-footer" },
+	          'div',
+	          { className: 'table-footer' },
 	          React.createElement(
-	            "div",
-	            { className: "table-cell" },
-	            "$",
+	            'div',
+	            { className: 'table-cell' },
+	            '$',
 	            totalRaised,
-	            " Raised in Total"
+	            ' Raised in Total'
 	          )
 	        )
 	      );
 	    });
 
 	    return React.createElement(
-	      "div",
+	      'div',
 	      null,
 	      React.createElement(
-	        "div",
-	        { className: "form-section", id: "convertibleNotesTutorial" },
+	        'div',
+	        { className: 'form-section', id: 'convertibleNotesTutorial' },
 	        React.createElement(
-	          "h4",
-	          { className: "form-section-header" },
-	          "Convertible Notes",
+	          'h4',
+	          { className: 'form-section-header' },
+	          'Convertible Notes',
 	          React.createElement(
-	            "small",
+	            'small',
 	            null,
 	            React.createElement(
-	              "a",
-	              { href: "#", "data-toggle": "modal", "data-target": "#noteModal" },
-	              React.createElement("span", { className: "glyphicon glyphicon-new-window" })
+	              'a',
+	              { href: '#', 'data-toggle': 'modal', 'data-target': '#noteModal' },
+	              React.createElement('span', { className: 'glyphicon glyphicon-new-window' })
 	            )
 	          )
 	        ),
 	        React.createElement(
-	          "form",
-	          { className: "form-inline", name: "convertibleNoteForm" },
-	          React.createElement("input", { className: "form-control form-control-large", type: "number", placeholder: "Cap", required: "" }),
-	          React.createElement("input", { className: "form-control form-control-small", type: "number", placeholder: "Discount %", required: "" }),
-	          React.createElement("input", { className: "btn btn-primary", type: "submit", value: "Add" })
+	          'form',
+	          { className: 'form-inline', name: 'convertibleNoteForm' },
+	          React.createElement('input', { className: 'form-control form-control-large', type: 'number', placeholder: 'Cap', required: '' }),
+	          React.createElement('input', { className: 'form-control form-control-small', type: 'number', placeholder: 'Discount %', required: '' }),
+	          React.createElement('input', { className: 'btn btn-primary', type: 'submit', value: 'Add' })
 	        ),
 	        convertibleNotesJSX
 	      )

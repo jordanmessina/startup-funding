@@ -8,7 +8,7 @@ class ConvertibleNotes extends React.Component {
 
       var investorDropdownJSX = props.investors.map( function (investor) {
         return (
-          <option value={investor.id} className="">{investor.name}</option>
+          <option key={'investorDropdown_' + convertibleNote.key} value={investor.id} className="">{investor.name}</option>
         ); 
       });
 
@@ -17,7 +17,7 @@ class ConvertibleNotes extends React.Component {
           return investorInvestment.id == investor.id;
         })[0].name;
         return (
-          <div className="table-row">
+          <div key={'investorInvestment_' + investorInvestment.key} className="table-row">
             <div className="table-cell table-cell-large">
               {investorName}
             </div>
