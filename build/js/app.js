@@ -47,10 +47,10 @@
 	var React = __webpack_require__(1);
 	var ReactDOM = __webpack_require__(32);
 	var Founders = __webpack_require__(178);
-	var Investors = __webpack_require__(179);
-	var ConvertibleNotes = __webpack_require__(180);
-	var EquityRound = __webpack_require__(181);
-	var EquityBreakdown = __webpack_require__(182);
+	var Investors = __webpack_require__(181);
+	var ConvertibleNotes = __webpack_require__(182);
+	var EquityRound = __webpack_require__(183);
+	var EquityBreakdown = __webpack_require__(184);
 
 	class StartupFunding extends React.Component {
 	  constructor(props) {
@@ -21664,35 +21664,12 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var AddFounderForm = __webpack_require__(179);
+	var FoundersList = __webpack_require__(180);
 
 	class Founders extends React.Component {
 	  constructor(props) {
 	    super(props);
-	    this.state = {
-	      founderName: '',
-	      founderEquity: ''
-	    };
-	    this.handleFounderNameChange = this.handleFounderNameChange.bind(this);
-	    this.handleFounderEquityChange = this.handleFounderEquityChange.bind(this);
-	    this.handleFormSubmit = this.handleFormSubmit.bind(this);
-	    this.handleRemoveFounder = this.handleRemoveFounder.bind(this);
-	  }
-
-	  handleFounderNameChange(event) {
-	    this.setState({ founderName: event.target.value });
-	  }
-
-	  handleFounderEquityChange(event) {
-	    this.setState({ founderEquity: event.target.value });
-	  }
-
-	  handleFormSubmit(event) {
-	    event.preventDefault();
-	    this.props.addFounder(this.state.founderName, Number(this.state.founderEquity));
-	    this.setState({
-	      founderName: '',
-	      founderEquity: ''
-	    });
 	  }
 
 	  handleRemoveFounder(founderKey) {
@@ -21704,38 +21681,6 @@
 	  }
 
 	  render() {
-	    var component = this;
-	    var founderJSX = this.props.founders.map(function (founder) {
-	      return React.createElement(
-	        'div',
-	        { className: 'table-row' },
-	        React.createElement(
-	          'div',
-	          { className: 'table-cell table-cell-large' },
-	          React.createElement('input', { className: 'ghost-control ghost-control-full', type: 'text', value: founder.name })
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'table-cell table-cell-small' },
-	          React.createElement('input', { type: 'number', className: 'ghost-control ghost-control-full', value: founder.equity })
-	        ),
-	        React.createElement(
-	          'button',
-	          { type: 'button', className: 'table-row-delete', onClick: component.handleRemoveFounder(founder.key) },
-	          React.createElement(
-	            'span',
-	            { 'aria-hidden': 'true' },
-	            '\xD7'
-	          )
-	        )
-	      );
-	    });
-
-	    var totalFounderEquity = 0;
-	    for (var i = 0; i < this.props.founders.length; i++) {
-	      totalFounderEquity += this.props.founders[i].equity;
-	    }
-
 	    return React.createElement(
 	      'div',
 	      null,
@@ -21756,33 +21701,8 @@
 	            )
 	          )
 	        ),
-	        React.createElement(
-	          'form',
-	          { className: 'form-inline', name: 'founderForm', onSubmit: this.handleFormSubmit },
-	          React.createElement('input', { className: 'form-control form-control-large', type: 'text', placeholder: 'Founder Name', required: '', value: this.state.founderName, onChange: this.handleFounderNameChange }),
-	          React.createElement('input', { className: 'form-control form-control-small', type: 'number', placeholder: 'Equity %', max: '99.6', min: '0', step: 'any', required: '', value: this.state.founderEquity, onChange: this.handleFounderEquityChange }),
-	          React.createElement('input', { className: 'btn btn-primary', type: 'submit', value: 'Add' })
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'table table-bordered' },
-	          founderJSX,
-	          React.createElement(
-	            'div',
-	            { className: 'table-footer' },
-	            React.createElement(
-	              'div',
-	              { className: 'table-cell table-cell-large' },
-	              'TOTAL'
-	            ),
-	            React.createElement(
-	              'div',
-	              { className: 'table-cell table-cell-small' },
-	              totalFounderEquity,
-	              '%'
-	            )
-	          )
-	        )
+	        React.createElement(AddFounderForm, { addFounder: this.props.addFounder }),
+	        React.createElement(FoundersList, { founders: this.props.founders, removeFounder: this.props.removeFounder })
 	      )
 	    );
 	  }
@@ -21792,6 +21712,140 @@
 
 /***/ },
 /* 179 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+
+	class AddFounderForm extends React.Component {
+	  constructor(props) {
+	    super(props);
+	    this.state = {
+	      founderName: '',
+	      founderEquity: ''
+	    };
+	    this.handleFounderNameChange = this.handleFounderNameChange.bind(this);
+	    this.handleFounderEquityChange = this.handleFounderEquityChange.bind(this);
+	    this.handleFormSubmit = this.handleFormSubmit.bind(this);
+	  }
+
+	  handleFounderNameChange(event) {
+	    this.setState({ founderName: event.target.value });
+	  }
+
+	  handleFounderEquityChange(event) {
+	    this.setState({ founderEquity: event.target.value });
+	  }
+
+	  handleFormSubmit(event) {
+	    event.preventDefault();
+	    this.props.addFounder(this.state.founderName, Number(this.state.founderEquity));
+	    this.setState({
+	      founderName: '',
+	      founderEquity: ''
+	    });
+	  }
+
+	  render() {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'form',
+	        { className: 'form-inline', name: 'founderForm', onSubmit: this.handleFormSubmit },
+	        React.createElement('input', { className: 'form-control form-control-large', type: 'text', placeholder: 'Founder Name', required: '', value: this.state.founderName, onChange: this.handleFounderNameChange }),
+	        React.createElement('input', { className: 'form-control form-control-small', type: 'number', placeholder: 'Equity %', max: '99.6', min: '0', step: 'any', required: '', value: this.state.founderEquity, onChange: this.handleFounderEquityChange }),
+	        React.createElement('input', { className: 'btn btn-primary', type: 'submit', value: 'Add' })
+	      )
+	    );
+	  }
+	}
+
+	module.exports = AddFounderForm;
+
+/***/ },
+/* 180 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+
+	class FoundersList extends React.Component {
+	  constructor(props) {
+	    super(props);
+	    this.handleRemoveFounder = this.handleRemoveFounder.bind(this);
+	  }
+
+	  handleRemoveFounder(founderKey) {
+	    var component = this;
+	    return function (event) {
+	      event.preventDefault();
+	      component.props.removeFounder(founderKey);
+	    };
+	  }
+
+	  render() {
+	    var component = this;
+	    var founderJSX = this.props.founders.map(function (founder) {
+	      return React.createElement(
+	        "div",
+	        { className: "table-row" },
+	        React.createElement(
+	          "div",
+	          { className: "table-cell table-cell-large" },
+	          React.createElement("input", { className: "ghost-control ghost-control-full", type: "text", value: founder.name })
+	        ),
+	        React.createElement(
+	          "div",
+	          { className: "table-cell table-cell-small" },
+	          React.createElement("input", { type: "number", className: "ghost-control ghost-control-full", value: founder.equity })
+	        ),
+	        React.createElement(
+	          "button",
+	          { type: "button", className: "table-row-delete", onClick: component.handleRemoveFounder(founder.key) },
+	          React.createElement(
+	            "span",
+	            { "aria-hidden": "true" },
+	            "\xD7"
+	          )
+	        )
+	      );
+	    });
+
+	    var totalFounderEquity = 0;
+	    for (var i = 0; i < this.props.founders.length; i++) {
+	      totalFounderEquity += this.props.founders[i].equity;
+	    }
+
+	    if (this.props.founders.length > 0) {
+	      return React.createElement(
+	        "div",
+	        { className: "table table-bordered" },
+	        founderJSX,
+	        React.createElement(
+	          "div",
+	          { className: "table-footer" },
+	          React.createElement(
+	            "div",
+	            { className: "table-cell table-cell-large" },
+	            "TOTAL"
+	          ),
+	          React.createElement(
+	            "div",
+	            { className: "table-cell table-cell-small" },
+	            totalFounderEquity,
+	            "%"
+	          )
+	        )
+	      );
+	    } else {
+	      return React.createElement("div", null);
+	    }
+	  }
+	}
+
+	module.exports = FoundersList;
+
+/***/ },
+/* 181 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -21885,7 +21939,7 @@
 	module.exports = Investors;
 
 /***/ },
-/* 180 */
+/* 182 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -22043,7 +22097,7 @@
 	module.exports = ConvertibleNotes;
 
 /***/ },
-/* 181 */
+/* 183 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -22201,7 +22255,7 @@
 	module.exports = EquityRound;
 
 /***/ },
-/* 182 */
+/* 184 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);

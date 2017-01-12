@@ -1,10 +1,10 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
-var Founders = require('./founders');
-var Investors = require('./investors');
-var ConvertibleNotes = require('./convertibleNotes');
-var EquityRound = require('./equityRound');
-var EquityBreakdown = require('./equityBreakdown');
+var Founders = require('./founders/founders');
+var Investors = require('./investors/investors');
+var ConvertibleNotes = require('./convertibleNotes/convertibleNotes');
+var EquityRound = require('./equityRound/equityRound');
+var EquityBreakdown = require('./equityBreakdown/equityBreakdown');
 
 class StartupFunding extends React.Component {
   constructor(props) {
