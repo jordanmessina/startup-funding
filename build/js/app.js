@@ -63,6 +63,9 @@
 	    };
 	    this.addFounder = this.addFounder.bind(this);
 	    this.removeFounder = this.removeFounder.bind(this);
+	    this.addInvestor = this.addInvestor.bind(this);
+	    this.removeInvestor = this.removeInvestor.bind(this);
+	    this.addConvertibleNote = this.addConvertibleNote.bind(this);
 	  }
 
 	  addFounder(name, equity) {
@@ -78,7 +81,7 @@
 	    } else {
 	      // get next id
 	      var founderKeys = this.state.founders.map(function (founder) {
-	        founder.key;
+	        return founder.key;
 	      });
 	      var nextFounderKey = Math.max.apply(null, founderKeys) + 1;
 	      var founders = this.state.founders;
@@ -100,21 +103,44 @@
 	    this.setState({ founders: founders });
 	  }
 
-	  render() {
-	    var investors = [{
-	      key: 1,
-	      name: "Ludlow Ventures"
-	    }, {
-	      key: 2,
-	      name: "Upfront Ventures"
-	    }, {
-	      key: 3,
-	      name: "Jason Calacanis"
-	    }, {
-	      key: 4,
-	      name: "Andressen Horowitz"
-	    }];
+	  addInvestor(name) {
+	    //add first investor
+	    if (this.state.investors.length == 0) {
+	      this.setState({
+	        investors: [{
+	          key: 1,
+	          name: name
+	        }]
+	      });
+	    } else {
+	      // get next id
+	      var investorKeys = this.state.investors.map(function (investor) {
+	        return investor.key;
+	      });
+	      var nextInvestorKey = Math.max.apply(null, investorKeys) + 1;
+	      var investors = this.state.investors;
+	      investors.push({
+	        key: nextInvestorKey,
+	        name: name
+	      });
+	      this.setState({
+	        investors: investors
+	      });
+	    }
+	  }
 
+	  removeInvestor(investorKey) {
+	    var investors = this.state.investors.filter(function (investor) {
+	      return investorKey != investor.key;
+	    });
+	    this.setState({ investors: investors });
+	  }
+
+	  addConvertibleNote(cap, discount) {}
+
+	  removeConvertibleNote(convertibleNoteKey) {}
+
+	  render() {
 	    var convertibleNotes = [{
 	      key: 1,
 	      cap: 2000000,
@@ -198,13 +224,13 @@
 	              'div',
 	              { className: 'col-sm-6' },
 	              React.createElement(Founders, { founders: this.state.founders, addFounder: this.addFounder, removeFounder: this.removeFounder }),
-	              React.createElement(Investors, { investors: investors })
+	              React.createElement(Investors, { investors: this.state.investors, addInvestor: this.addInvestor, removeInvestor: this.removeInvestor })
 	            ),
 	            React.createElement(
 	              'div',
 	              { className: 'col-sm-6' },
-	              React.createElement(ConvertibleNotes, { convertibleNotes: convertibleNotes, investors: investors }),
-	              React.createElement(EquityRound, { equityRounds: equityRounds, investors: investors })
+	              React.createElement(ConvertibleNotes, { convertibleNotes: this.state.convertibleNotes, investors: this.state.investors }),
+	              React.createElement(EquityRound, { equityRounds: this.state.equityRounds, investors: this.state.investors })
 	            )
 	          )
 	        ),
@@ -21669,20 +21695,20 @@
 	    });
 	  }
 
-	  handleRemoveFounder(event) {
-	    event.preventDefault();
-	    console.log('in handleRemoveFounder');
-	    console.log(event);
-	    this.props.removeFounder(Number(event.target.id));
+	  handleRemoveFounder(founderKey) {
+	    var component = this;
+	    return function (event) {
+	      event.preventDefault();
+	      component.props.removeFounder(founderKey);
+	    };
 	  }
 
 	  render() {
 	    var component = this;
 	    var founderJSX = this.props.founders.map(function (founder) {
-	      console.log(founder);
 	      return React.createElement(
 	        'div',
-	        { key: 'founder_' + founder.key, className: 'table-row' },
+	        { className: 'table-row' },
 	        React.createElement(
 	          'div',
 	          { className: 'table-cell table-cell-large' },
@@ -21695,7 +21721,7 @@
 	        ),
 	        React.createElement(
 	          'button',
-	          { id: founder.key, type: 'button', className: 'table-row-delete', onClick: component.handleRemoveFounder },
+	          { type: 'button', className: 'table-row-delete', onClick: component.handleRemoveFounder(founder.key) },
 	          React.createElement(
 	            'span',
 	            { 'aria-hidden': 'true' },
@@ -21771,56 +21797,84 @@
 	var React = __webpack_require__(1);
 
 	class Investors extends React.Component {
+	  constructor(props) {
+	    super(props);
+	    this.state = {
+	      investorName: ''
+	    };
+	    this.handleInvestorNameChange = this.handleInvestorNameChange.bind(this);
+	    this.handleFormSubmit = this.handleFormSubmit.bind(this);
+	  }
+
+	  handleInvestorNameChange(event) {
+	    this.setState({ investorName: event.target.value });
+	  }
+
+	  handleFormSubmit(event) {
+	    event.preventDefault();
+	    this.props.addInvestor(this.state.investorName);
+	    this.setState({ investorName: '' });
+	  }
+
+	  handleRemoveInvestor(investorKey) {
+	    var component = this;
+	    return function (event) {
+	      event.preventDefault();
+	      component.props.removeInvestor(investorKey);
+	    };
+	  }
+
 	  render() {
+	    var component = this;
 	    var investorsJSX = this.props.investors.map(function (investor) {
 	      return React.createElement(
-	        "div",
-	        { key: investor.key, className: "table-row" },
+	        'div',
+	        { key: investor.key, className: 'table-row' },
 	        React.createElement(
-	          "div",
-	          { className: "table-cell table-cell-single" },
-	          React.createElement("input", { className: "ghost-control ghost-control-full", type: "text", value: investor.name })
+	          'div',
+	          { className: 'table-cell table-cell-single' },
+	          React.createElement('input', { className: 'ghost-control ghost-control-full', type: 'text', value: investor.name })
 	        ),
 	        React.createElement(
-	          "button",
-	          { type: "button", className: "table-row-delete" },
+	          'button',
+	          { type: 'button', className: 'table-row-delete', onClick: component.handleRemoveInvestor(investor.key) },
 	          React.createElement(
-	            "span",
-	            { "aria-hidden": "true" },
-	            "\xD7"
+	            'span',
+	            { 'aria-hidden': 'true' },
+	            '\xD7'
 	          )
 	        )
 	      );
 	    });
 	    return React.createElement(
-	      "div",
+	      'div',
 	      null,
 	      React.createElement(
-	        "div",
-	        { className: "form-section", id: "investorsTutorial" },
+	        'div',
+	        { className: 'form-section', id: 'investorsTutorial' },
 	        React.createElement(
-	          "h4",
-	          { className: "form-section-header" },
-	          "Investor List",
+	          'h4',
+	          { className: 'form-section-header' },
+	          'Investor List',
 	          React.createElement(
-	            "small",
+	            'small',
 	            null,
 	            React.createElement(
-	              "a",
-	              { href: "#", "data-toggle": "modal", "data-target": "#investorModal" },
-	              React.createElement("span", { className: "glyphicon glyphicon-new-window" })
+	              'a',
+	              { href: '#', 'data-toggle': 'modal', 'data-target': '#investorModal' },
+	              React.createElement('span', { className: 'glyphicon glyphicon-new-window' })
 	            )
 	          )
 	        ),
 	        React.createElement(
-	          "form",
-	          { className: "form-inline" },
-	          React.createElement("input", { className: "form-control form-control-single", type: "text", placeholder: "Investor Name", required: "" }),
-	          React.createElement("input", { className: "btn btn-primary", type: "submit", value: "Add" })
+	          'form',
+	          { className: 'form-inline', onSubmit: this.handleFormSubmit },
+	          React.createElement('input', { className: 'form-control form-control-single', type: 'text', placeholder: 'Investor Name', required: '', value: this.state.investorName, onChange: this.handleInvestorNameChange }),
+	          React.createElement('input', { className: 'btn btn-primary', type: 'submit', value: 'Add' })
 	        ),
 	        React.createElement(
-	          "div",
-	          { className: "table table-bordered" },
+	          'div',
+	          { className: 'table table-bordered' },
 	          investorsJSX
 	        )
 	      )

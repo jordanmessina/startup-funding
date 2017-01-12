@@ -30,26 +30,26 @@ class Founders extends React.Component {
     });
   }
 
-  handleRemoveFounder(event) {
-    event.preventDefault();
-    console.log('in handleRemoveFounder');
-    console.log(event);
-    this.props.removeFounder(Number(event.target.id));
+  handleRemoveFounder(founderKey) {
+    var component = this;
+    return function (event){
+      event.preventDefault();
+      component.props.removeFounder(founderKey);
+    }
   }
 
   render() {
     var component = this;
     var founderJSX = this.props.founders.map( function (founder) {
-        console.log(founder);
         return (
-          <div key={'founder_' + founder.key} className="table-row">
+          <div className="table-row">
             <div className="table-cell table-cell-large">
               <input className="ghost-control ghost-control-full" type="text" value={founder.name} />
             </div>
             <div className="table-cell table-cell-small">
               <input type="number" className="ghost-control ghost-control-full" value={founder.equity} />
             </div>
-            <button id={founder.key} type="button" className="table-row-delete" onClick={component.handleRemoveFounder}><span aria-hidden="true">×</span></button>
+            <button type="button" className="table-row-delete" onClick={component.handleRemoveFounder(founder.key)}><span aria-hidden="true">×</span></button>
           </div>
         );
     });

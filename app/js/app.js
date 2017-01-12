@@ -17,6 +17,9 @@ class StartupFunding extends React.Component {
     }
     this.addFounder = this.addFounder.bind(this);
     this.removeFounder = this.removeFounder.bind(this);
+    this.addInvestor = this.addInvestor.bind(this);
+    this.removeInvestor = this.removeInvestor.bind(this);
+    this.addConvertibleNote = this.addConvertibleNote.bind(this);
   }
 
   addFounder(name, equity) {
@@ -32,7 +35,7 @@ class StartupFunding extends React.Component {
     } else {
       // get next id
       var founderKeys = this.state.founders.map( function (founder) {
-        founder.key
+        return founder.key
       });
       var nextFounderKey = Math.max.apply(null, founderKeys) + 1;
       var founders = this.state.founders;
@@ -54,26 +57,48 @@ class StartupFunding extends React.Component {
     this.setState({ founders: founders });
   }
 
-  render() {
-    var investors = [
-      {
-        key: 1,
-        name: "Ludlow Ventures"
-      },
-      {
-        key: 2,
-        name: "Upfront Ventures"
-      },
-      {
-        key: 3,
-        name: "Jason Calacanis"
-      },
-      {
-        key: 4,
-        name: "Andressen Horowitz"
-      }
-    ];
+  addInvestor(name) {
+    //add first investor
+    if(this.state.investors.length == 0) {
+      this.setState({
+        investors: [{
+          key: 1,
+          name: name,
+        }]
+      });
+    } else {
+      // get next id
+      var investorKeys = this.state.investors.map( function (investor) {
+        return investor.key
+      });
+      var nextInvestorKey = Math.max.apply(null, investorKeys) + 1;
+      var investors = this.state.investors;
+      investors.push({
+       key: nextInvestorKey,
+       name: name,
+      });
+      this.setState({
+          investors: investors
+      }); 
+    }
+  }
 
+  removeInvestor(investorKey) {
+    var investors = this.state.investors.filter( function(investor) {
+        return investorKey != investor.key;
+    });
+    this.setState({ investors: investors });
+  }
+
+  addConvertibleNote(cap, discount) {
+
+  }
+
+  removeConvertibleNote(convertibleNoteKey) {
+
+  }
+
+  render() {
     var convertibleNotes = [
       {
         key: 1,
@@ -122,11 +147,11 @@ class StartupFunding extends React.Component {
             <div className="row">
               <div className="col-sm-6">
                 <Founders founders={this.state.founders} addFounder={this.addFounder} removeFounder={this.removeFounder} />
-                <Investors investors={investors}/>
+                <Investors investors={this.state.investors} addInvestor={this.addInvestor} removeInvestor={this.removeInvestor} />
               </div>
               <div className="col-sm-6">
-                <ConvertibleNotes convertibleNotes={convertibleNotes} investors={investors}/>
-                <EquityRound equityRounds={equityRounds} investors={investors}/>
+                <ConvertibleNotes convertibleNotes={this.state.convertibleNotes} investors={this.state.investors}/>
+                <EquityRound equityRounds={this.state.equityRounds} investors={this.state.investors}/>
               </div>
             </div>
           </div>
