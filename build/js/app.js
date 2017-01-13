@@ -48,9 +48,9 @@
 	var ReactDOM = __webpack_require__(32);
 	var Founders = __webpack_require__(178);
 	var Investors = __webpack_require__(181);
-	var ConvertibleNotes = __webpack_require__(182);
-	var EquityRound = __webpack_require__(183);
-	var EquityBreakdown = __webpack_require__(184);
+	var ConvertibleNotes = __webpack_require__(184);
+	var EquityRound = __webpack_require__(185);
+	var EquityBreakdown = __webpack_require__(186);
 
 	class StartupFunding extends React.Component {
 	  constructor(props) {
@@ -21849,57 +21849,15 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
+	var AddInvestorForm = __webpack_require__(182);
+	var InvestorsList = __webpack_require__(183);
 
 	class Investors extends React.Component {
 	  constructor(props) {
 	    super(props);
-	    this.state = {
-	      investorName: ''
-	    };
-	    this.handleInvestorNameChange = this.handleInvestorNameChange.bind(this);
-	    this.handleFormSubmit = this.handleFormSubmit.bind(this);
-	  }
-
-	  handleInvestorNameChange(event) {
-	    this.setState({ investorName: event.target.value });
-	  }
-
-	  handleFormSubmit(event) {
-	    event.preventDefault();
-	    this.props.addInvestor(this.state.investorName);
-	    this.setState({ investorName: '' });
-	  }
-
-	  handleRemoveInvestor(investorKey) {
-	    var component = this;
-	    return function (event) {
-	      event.preventDefault();
-	      component.props.removeInvestor(investorKey);
-	    };
 	  }
 
 	  render() {
-	    var component = this;
-	    var investorsJSX = this.props.investors.map(function (investor) {
-	      return React.createElement(
-	        'div',
-	        { key: investor.key, className: 'table-row' },
-	        React.createElement(
-	          'div',
-	          { className: 'table-cell table-cell-single' },
-	          React.createElement('input', { className: 'ghost-control ghost-control-full', type: 'text', value: investor.name })
-	        ),
-	        React.createElement(
-	          'button',
-	          { type: 'button', className: 'table-row-delete', onClick: component.handleRemoveInvestor(investor.key) },
-	          React.createElement(
-	            'span',
-	            { 'aria-hidden': 'true' },
-	            '\xD7'
-	          )
-	        )
-	      );
-	    });
 	    return React.createElement(
 	      'div',
 	      null,
@@ -21920,17 +21878,8 @@
 	            )
 	          )
 	        ),
-	        React.createElement(
-	          'form',
-	          { className: 'form-inline', onSubmit: this.handleFormSubmit },
-	          React.createElement('input', { className: 'form-control form-control-single', type: 'text', placeholder: 'Investor Name', required: '', value: this.state.investorName, onChange: this.handleInvestorNameChange }),
-	          React.createElement('input', { className: 'btn btn-primary', type: 'submit', value: 'Add' })
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'table table-bordered' },
-	          investorsJSX
-	        )
+	        React.createElement(AddInvestorForm, { addInvestor: this.props.addInvestor }),
+	        React.createElement(InvestorsList, { investors: this.props.investors, removeInvestor: this.props.removeInvestor })
 	      )
 	    );
 	  }
@@ -21940,6 +21889,106 @@
 
 /***/ },
 /* 182 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+
+	class AddInvestorForm extends React.Component {
+	  constructor(props) {
+	    super(props);
+	    this.state = {
+	      investorName: ''
+	    };
+
+	    this.handleInvestorNameChange = this.handleInvestorNameChange.bind(this);
+	    this.handleFormSubmit = this.handleFormSubmit.bind(this);
+	  }
+
+	  handleInvestorNameChange(event) {
+	    this.setState({ investorName: event.target.value });
+	  }
+
+	  handleFormSubmit(event) {
+	    event.preventDefault();
+	    this.props.addInvestor(this.state.investorName);
+	    this.setState({ investorName: '' });
+	  }
+
+	  render() {
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'form',
+	        { className: 'form-inline', onSubmit: this.handleFormSubmit },
+	        React.createElement('input', { className: 'form-control form-control-single', type: 'text', placeholder: 'Investor Name', required: '', value: this.state.investorName, onChange: this.handleInvestorNameChange }),
+	        React.createElement('input', { className: 'btn btn-primary', type: 'submit', value: 'Add' })
+	      )
+	    );
+	  }
+
+	}
+
+	module.exports = AddInvestorForm;
+
+/***/ },
+/* 183 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+
+	class InvestorsList extends React.Component {
+	  constructor(props) {
+	    super(props);
+	    this.handleRemoveInvestor = this.handleRemoveInvestor.bind(this);
+	  }
+
+	  handleRemoveInvestor(investorKey) {
+	    var component = this;
+	    return function (event) {
+	      event.preventDefault();
+	      component.props.removeInvestor(investorKey);
+	    };
+	  }
+
+	  render() {
+	    var component = this;
+	    var investorsJSX = this.props.investors.map(function (investor) {
+	      return React.createElement(
+	        "div",
+	        { key: investor.key, className: "table-row" },
+	        React.createElement(
+	          "div",
+	          { className: "table-cell table-cell-single" },
+	          React.createElement("input", { className: "ghost-control ghost-control-full", type: "text", value: investor.name })
+	        ),
+	        React.createElement(
+	          "button",
+	          { type: "button", className: "table-row-delete", onClick: component.handleRemoveInvestor(investor.key) },
+	          React.createElement(
+	            "span",
+	            { "aria-hidden": "true" },
+	            "\xD7"
+	          )
+	        )
+	      );
+	    });
+	    if (this.props.investors.length > 0) {
+	      return React.createElement(
+	        "div",
+	        { className: "table table-bordered" },
+	        investorsJSX
+	      );
+	    } else {
+	      return React.createElement("div", null);
+	    }
+	  }
+	}
+
+	module.exports = InvestorsList;
+
+/***/ },
+/* 184 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -22097,7 +22146,7 @@
 	module.exports = ConvertibleNotes;
 
 /***/ },
-/* 183 */
+/* 185 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
@@ -22255,7 +22304,7 @@
 	module.exports = EquityRound;
 
 /***/ },
-/* 184 */
+/* 186 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
